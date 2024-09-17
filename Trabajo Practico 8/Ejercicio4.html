@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2 align="center">PRODUCTOS</h2>
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>CAMISA</th>
+                <td><input type="number" id="precioCamisa" value="30000" readonly></td>
+                <td><input type="number" id="cantidadCamisa" min="0"></td>
+                <td><input type="number" id="subtotalCamisa" readonly></td>
+            </tr>
+            <tr>
+                <th>PANTALÓN</th>
+                <td><input type="number" id="precioPantalon" value="50000" readonly></td>
+                <td><input type="number" id="cantidadPantalon" min="0"></td>
+                <td><input type="number" id="subtotalPantalon" readonly></td>
+            </tr>
+            <tr>
+                <th>ZAPATOS</th>
+                <td><input type="number" id="precioZapatos" value="80000" readonly></td>
+                <td><input type="number" id="cantidadZapatos" min="0"></td>
+                <td><input type="number" id="subtotalZapatos" readonly></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="totalCompra">
+        <label for="total">Total Compra:</label>
+        <input type="number" id="total" readonly>
+    </div>
+
+    <div style="text-align:center;">
+        <button id="btnCalcularSubtotales" class="boton">Calcular Subtotales</button>
+        <button id="btnCalcularTotal" class="boton">Calcular Total</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Obtener referencias a los botones
+            const btnCalcularSubtotales = document.getElementById('btnCalcularSubtotales');
+            const btnCalcularTotal = document.getElementById('btnCalcularTotal');
+
+            // Agregar event listeners a los botones
+            btnCalcularSubtotales.addEventListener('click', calcularSubtotales);
+            btnCalcularTotal.addEventListener('click', calcularTotal);
+        });
+
+        function calcularSubtotales() {
+            calcularSubtotal('precioCamisa', 'cantidadCamisa', 'subtotalCamisa');
+            calcularSubtotal('precioPantalon', 'cantidadPantalon', 'subtotalPantalon');
+            calcularSubtotal('precioZapatos', 'cantidadZapatos', 'subtotalZapatos');
+        }
+
+        function calcularSubtotal(precioId, cantidadId, subtotalId) {
+            const precio = document.getElementById(precioId).value;
+            const cantidad = document.getElementById(cantidadId).value;
+            const subtotal = precio * cantidad;
+
+            document.getElementById(subtotalId).value = subtotal || 0;
+        }
+
+        function calcularTotal() {
+            const subtotalCamisa = parseFloat(document.getElementById('subtotalCamisa').value) || 0;
+            const subtotalPantalon = parseFloat(document.getElementById('subtotalPantalon').value) || 0;
+            const subtotalZapatos = parseFloat(document.getElementById('subtotalZapatos').value) || 0;
+
+            const total = subtotalCamisa + subtotalPantalon + subtotalZapatos;
+            document.getElementById('total').value = total;
+        }
+
+    </script>
+</body>
+
+</html>

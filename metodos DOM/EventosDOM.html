@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVENTOS DOM</title>
+</head>
+<body>
+    <button id="idboton">Enviar</button>
+    <button id="idsaludar">Saludar</button>
+    <script>
+        //Ejecuta el metodo al dispararse el evento click
+        document.getElementById("idboton").addEventListener("click",function(){
+            alert("EventListener");
+            //llama a la funcion cuando se dispara el evento click
+            mostrarmensaje1();
+            mostrarmensaje2();
+        });
+        function mostrarmensaje1(){
+            alert('Mensaje nro UNO everlistener fuera del evento');
+        };
+        function mostrarmensaje2(){
+            alert('Mensaje nro DOS everlistener fuera del evento');
+        };
+        //funciones que no se solapen
+        var elemento= document.getElementById('idboton');
+       elemento.addEventListener('mouseup',mostrarmensaje1);
+       elemento.addEventListener('click',mostrarmensaje2);
+
+        //Evento con funciones anidadas
+        document.getElementById("idsaludar").addEventListener("click",function(){
+            saludar('Sele');
+        });
+        function saludar(nombre){
+            alert('Hola '+nombre);
+        };
+    </script>
+</body>
+</html>

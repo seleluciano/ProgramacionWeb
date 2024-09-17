@@ -1,0 +1,22 @@
+body{
+    color:rgb(0, 209, 139);
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+a{
+    color:inherit;
+}
+p{
+    color:rgb(17, 16, 17) !important;
+}
+#texto1{
+    background-color: rgb(223, 134, 203);
+    font-size: x-large;
+    font-family: fantasy;
+    font-variant-caps: small-caps;
+}
+.texto2{
+    background-color: rgb(0, 240, 108);
+    font-size:x-large;
+    font-family: fantasy;
+    font-variant-caps: small-caps;
+}

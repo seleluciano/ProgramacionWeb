@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        
+    </header>
+    <button onclick="titulo">Titulo</button>
+    <fieldset>
+        <form>
+            <h1>FORMULARIO</h1>
+            <p>
+                <label>Nombre:</label>
+                <input type="text" placeholder="Nombre" id="nombre">
+            </p>
+            <p>
+                <label>Apellido:</label>
+                <input type="text" placeholder="Apellido" id="apellido">
+            </p>
+            <p>
+                <label>Email:</label>
+                <input type="email" placeholder="Email">
+            </p>
+            <p>
+                <label>Edad:</label>
+                <input type="number" placeholder="Edad">
+            </p>
+            <p>
+                <label for="fecha-nacimiento">Fecha de Nacimiento:</label>
+                <input type="date" id="fecha-nacimiento" required><br><br>
+            </p>
+
+
+            <button>Enviar</button>
+        </form>
+    </fieldset>
+    <button onclick="completardatos">Completar nombre y apellido</button>
+    <button onclick="crearbotones">Sexo</button>
+    <section></section>
+
+    <script>
+        function completardatos() {
+            var elemento = document.getElementById('nombre');
+            elemento.innerHTML = "Selene";
+            var elemento = document.getElementById('apellido');
+            elemento.innerHTML = "Luciano";
+        }
+        function crearbotones() {
+            var elementos = document.getElementsByTagName('section');
+            var p1 = document.createElement('button');
+            var femenino = document.createTextNode('Femenino');
+            p1.appendChild(femenino);
+            var p2 = document.createElement('button');
+            var masculino = document.createTextNode('Masculino');
+            p2.appendChild(masculino);
+            for(var i= 0; i< elementos.length;i++){
+                elementos[i].appendChild(p1);
+                elementos[i].appendChild(p2);
+            }
+        }
+        function titulo() {
+            var elementos = document.getElementsById('header');
+            var h1 = document.createElement('h1');
+            var t = document.createTextNode('DATOS PERSONALES');
+            h1.appendChild(t);
+            for(var i= 0; i< elementos.length;i++){
+                elementos[i].appendChild(h1);
+            }
+        }
+
+    </script>
+</body>
+
+</html>

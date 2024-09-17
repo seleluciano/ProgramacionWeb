@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contar Enlaces</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Enlaces a Redes y Páginas</h2>
+    
+    <div class="enlaces">
+        <a href="https://www.google.com" target="_blank">Google</a>
+        <a href="https://www.facebook.com" target="_blank">Facebook</a>
+        <a href="https://www.twitter.com" target="_blank">Twitter</a>
+        <a href="https://www.youtube.com" target="_blank">YouTube</a>
+    </div>
+
+    <button class="boton" onclick="contarEnlaces()">Contar Enlaces</button>
+    
+    <p id="resultado"></p>
+
+    <script>
+        function contarEnlaces() {
+            const enlaces = document.getElementsByTagName('a');
+             document.getElementById('resultado').innerText = `Cantidad de enlaces: ${enlaces.length}`;
+        }
+    </script>
+</body>
+</html>

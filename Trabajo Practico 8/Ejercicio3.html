@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Ejemplo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h2 align="center">Formulario de Ejemplo</h2>
+
+    <form id="miFormulario">
+        <label for="nombres">Nombres:</label>
+        <input type="text" id="nombres" name="nombres">
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" name="apellidos">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        <label for="comentario">Comentario:</label>
+        <textarea id="comentario" name="comentario" rows="4"></textarea>
+        <button type="button" onclick="enviarFormulario()">Enviar</button>
+    </form>
+
+    <p>Este es un párrafo opcional en el formulario.</p>
+
+    <script>
+        function enviarFormulario() {
+            // Obtener y contar elementos de tipo input
+            const inputs = document.getElementsByTagName('input');
+            const cantidadInputs = inputs.length;
+
+            // Obtener y contar elementos de tipo label
+            const labels = document.getElementsByTagName('label');
+            const cantidadLabels = labels.length;
+
+            // Obtener y contar elementos de tipo p
+            const parrafos = document.getElementsByTagName('p');
+            const cantidadParrafos = parrafos.length;
+
+            // Mostrar alertas con la cantidad de cada tipo de elemento
+            alert('Cantidad de inputs: ' + cantidadInputs);
+            alert('Cantidad de labels: ' + cantidadLabels);
+            alert('Cantidad de párrafos: ' + cantidadParrafos);
+        }
+    </script>
+
+</body>
+</html>

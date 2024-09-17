@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objetos</title>
+</head>
+<body>
+    
+
+    <script>
+        var persona={
+            nombre:"Juan",
+            edad:40,
+            moto:{
+                modelo:2018,
+                marca:"HONDA",
+            },
+            mostrarnombre:function(){
+                alert('me llamo ' + this.nombre);
+            },
+            cambiarnombre:function(nuevo){
+                this.nombre = nuevo; 
+            }
+        }
+        console.log(persona.nombre);
+        console.log(persona.cambiarnombre("Marcela"));
+        console.log(persona.mostrarnombre());
+    </script>
+</body>
+</html>

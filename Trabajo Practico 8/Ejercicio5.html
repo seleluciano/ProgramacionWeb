@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h2 id="tituloFormulario">Registro de Estudiantes</h2>
+    <fieldset>
+    <form id="formRegistro">
+        <label for="nombres">Nombres:</label>
+        <input type="text" id="nombres" name="nombres" required>
+
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" name="apellidos" required>
+
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccion" name="direccion" required>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" min="0" required>
+
+        <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+        <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+
+        <label for="lugarNacimiento">Lugar de Nacimiento:</label>
+        <input type="text" id="lugarNacimiento" name="lugarNacimiento" required>
+
+        <label for="estadoCivil">Estado Civil:</label>
+        <select id="estadoCivil" name="estadoCivil" required>
+            <option value="soltero">Soltero</option>
+            <option value="casado">Casado</option>
+            <option value="divorciado">Divorciado</option>
+            <option value="viudo">Viudo</option>
+        </select>
+        <br></br>
+        <button type="button" id="btnRegistrar">Registrar</button>
+        <br></br>
+        <button type="button" id="btnRojo">Cambiar color</button>
+        <button type="button" id="btnCambioTitulo">Cambiar Título</button>
+    </form>
+</fieldset>
+    <script>
+        document.getElementById('btnRegistrar').addEventListener('click', () => {
+            alert('Un alumno ha sido registrado.');
+        });
+
+        document.getElementById('btnRojo').addEventListener('click', () => {
+            document.getElementById('formRegistro').classList.toggle('red-text');
+        });
+
+        document.getElementById('btnCambioTitulo').addEventListener('click', () => {
+            const titulo = document.getElementById('tituloFormulario');
+            if (titulo.innerText === 'Registro de Estudiantes') {
+                titulo.innerText = 'Registro de Docentes';
+            } else {
+                titulo.innerText = 'Registro de Estudiantes';
+            }
+        });
+    </script>
+
+</body>
+</html>

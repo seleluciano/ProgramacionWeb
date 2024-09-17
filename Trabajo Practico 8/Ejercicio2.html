@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <p id="parrafo">Este es un párrafo.</p>
+    <label id="etiqueta" for="entrada">Nombre:</label>
+    <input type="text" id="entrada" value="Juan Pérez">
+    <br><br>
+    <button class="boton" onclick="modificarElementos()">Modificar Elementos</button>
+
+    <script>
+        function modificarElementos() {
+            // Cambiar el contenido del párrafo
+            document.getElementById('parrafo').innerText = 'Este es un párrafo modificado.';
+
+            // Cambiar el texto de la etiqueta
+            document.getElementById('etiqueta').innerText = 'Nuevo Nombre:';
+
+            // Cambiar el valor del campo de entrada
+            document.getElementById('entrada').value = 'Pedro González';
+        }
+    </script>
+</body>
+</html>
