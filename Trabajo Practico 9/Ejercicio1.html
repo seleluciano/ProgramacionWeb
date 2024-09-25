@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 1</title>
+      <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h1>Objeto Literal en JavaScript</h1>
+    <p id="propiedadPunto"></p>
+    <p id="propiedadCorchetes"></p>
+    <p id="metodo"></p>
+
+    <script>
+        // Declarar un objeto de forma literal
+        const persona = {
+            nombre: "Juan",
+            edad: 30,
+            profesion: "Ingeniero",
+            saludar: function() {
+                return `Hola, mi nombre es ${this.nombre} y soy ${this.profesion}.`;
+            }
+        };
+
+        // Mostrar el contenido de una propiedad usando la notación punto
+        document.getElementById("propiedadPunto").textContent = "Nombre (notación punto): " + persona.nombre;
+
+        // Mostrar el contenido de una propiedad usando la notación de corchetes
+        document.getElementById("propiedadCorchetes").textContent = "Edad (notación corchetes): " + persona["edad"];
+
+        // Mostrar el valor de una propiedad a través de un método
+        document.getElementById("metodo").textContent = persona.saludar();
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 5</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h1>Extender Objeto Constructor en JavaScript</h1>
+
+    <script>
+        // Definir un constructor de objeto
+        function Persona(nombre, edad, profesion) {
+            this.nombre = nombre;
+            this.edad = edad;
+            this.profesion = profesion;
+
+            // Método para mostrar información
+            this.mostrarInfo = function() {
+                return `Nombre: ${this.nombre}, Edad: ${this.edad}, Profesión: ${this.profesion}`;
+            };
+
+            // Método para modificar la profesión
+            this.cambiarProfesion = function(nuevaProfesion) {
+                this.profesion = nuevaProfesion;
+            };
+        }
+
+        // Extender el objeto constructor 'Persona' para agregar una nueva propiedad y un nuevo método
+        Persona.prototype.nacionalidad = "Desconocida";
+        Persona.prototype.mostrarNacionalidad = function() {
+            return `Nacionalidad: ${this.nacionalidad}`;
+        };
+
+        // Crear una nueva instancia del objeto Persona
+        const persona2 = new Persona("Carlos", 28, "Programador");
+
+        // Mostrar la información de la nueva instancia, incluyendo la nueva propiedad y método
+        console.log(persona2.mostrarInfo()); // Mostrará la información inicial
+        console.log(persona2.mostrarNacionalidad()); // Mostrará la nacionalidad por defecto
+
+        // Cambiar la nacionalidad de la persona
+        persona2.nacionalidad = "Argentino";
+
+        // Mostrar la nacionalidad actualizada usando el nuevo método
+        console.log("Información actualizada:");
+        console.log(persona2.mostrarNacionalidad());
+    </script>
+</body>
+</html>
+

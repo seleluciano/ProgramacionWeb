@@ -1,0 +1,82 @@
+/* Estilos generales para el cuerpo */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* Estilo para los títulos */
+h1 {
+    color: #4CAF50;
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+/* Estilo para los párrafos */
+p {
+    font-size: 1.2em;
+    line-height: 1.5;
+    color: #555;
+    margin: 10px 0;
+}
+
+/* Estilo para los botones */
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Estilo para el contenedor de cada ejercicio */
+.container {
+    background-color: white;
+    padding: 20px;
+    margin: 10px auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+}
+
+/* Estilo para la consola de resultados */
+.console {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-family: monospace;
+    white-space: pre-wrap;
+}
+
+.alert {
+    padding: 10px;
+    background-color: #ff9800;
+    color: white;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+/* Alineación de texto en el centro */
+.text-center {
+    text-align: center;
+}
+
+/* Estilo para el código */
+code {
+    background-color: #e0e0e0;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+}

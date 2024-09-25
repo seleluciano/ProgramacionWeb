@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 3</title>
+      <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h1>Objeto Creado con Object.create</h1>
+    <p id="mostrarPropiedad"></p>
+
+    <script>
+        // Declarar un objeto de forma literal
+        const persona = {
+            nombre: "Ana",
+            edad: 25,
+            profesion: "Diseñadora",
+            
+            modificarEdad: function(nuevaEdad) {
+                this.edad = nuevaEdad;
+            }
+        };
+
+        // Crear un nuevo objeto a partir del objeto 'persona' usando Object.create
+        const nuevaPersona = Object.create(persona);
+        
+        // Modificar propiedades del nuevo objeto si se desea
+        nuevaPersona.nombre = "Carlos";
+        nuevaPersona.edad = 28;
+        
+        // Mostrar un valor de las propiedades del nuevo objeto
+        document.getElementById("mostrarPropiedad").textContent = 
+            "El nombre de la nueva persona es: " + nuevaPersona.nombre + " y su edad es: " + nuevaPersona.edad;
+    </script>
+</body>
+</html>
+

@@ -26,6 +26,61 @@
         console.log(persona.nombre);
         console.log(persona.cambiarnombre("Marcela"));
         console.log(persona.mostrarnombre());
+        //Trabajando con objeto nativo
+        var empleado=Object.create(persona);
+        empleado.nombre='Jose';
+        console.log(empleado.mostrarnombre());
+         //Trabajando con objeto nativo
+        var empleado1= Object.create(empleado);
+        empleado1.edad=27;
+        empleado1.mostraredad=function(){
+            alert("la edad es: " + this.edad);
+        };
+        console.log(empleado1.mostraredad);
+        //Creacion del objeto mediante la notacion, funcion anidada y retorno
+        var mipersona=function(nombreinicial,edadinicial){
+            var obj={
+                nombre:nombreinicial,
+                edad:edadinicial,
+                cambiarnombre:function(nombreinicial){
+                    this.nombre=nombreinicial;
+                },
+                mostrarnombre:function(){
+                alert("Mi nombre es: " + this.nombre);
+            },
+            }
+             return obj;
+        }
+        var p=mipersona("Maria",22);
+        p.mostrarnombre();
+        //Constructor
+        function Constructor(nombreinicial,edadinicial,apellidoinicial){
+             this.nombre=nombreinicial;
+             this.edad=edadinicial;
+             this.apellido=apellidoinicial;
+             this.cambiarnombre= function(nuevonombre){
+                    this.nombre=nuevonombre;
+                };
+             this.mostrarnombre=function(){
+                alert("Mi nombre es: " + this.nombre);
+            };
+        }
+        var nuevapersona= new Constructor("Eliana", 20);
+        nuevapersona.mostrarnombre();
+        nuevapersona.peso=50;
+        nuevapersona.mostrarnombre();
+        alert("Mi peso es "+ nuevapersona.peso);
+        //Para agregar una nueva funcionalidad hay que crearla en el constructor ya que sino la creara solo en ese objeto
+        Constructor.prototype.mostraredad=function(){
+            alert("Edad:"+ this.edad);
+        }
+        
+        Constructor.prototype.mostrarapellido=function(){
+            alert("Apellido: "+ this.apellido);
+        }
+        var otrapersona=new Constructor("Sandra", 28,"Perez");
+        console.log(otrapersona.mostraredad());
+        console.log(otrapersona.mostrarapellido());
     </script>
 </body>
 </html>

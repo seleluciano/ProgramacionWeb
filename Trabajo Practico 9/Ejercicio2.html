@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 2</title>
+      <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h1>Objeto Literal en JavaScript</h1>
+    <button onclick="modificarEdad()">Modificar Edad</button>
+
+    <script>
+        // Declarar un objeto de forma literal
+        const persona = {
+            nombre: "Ana",
+            edad: 25,
+            profesion: "Diseñadora",
+            
+            // Método para modificar la propiedad 'edad'
+            modificarEdad: function(nuevaEdad) {
+                this.edad = nuevaEdad;
+            }
+        };
+
+        // Función que llama al método para modificar la propiedad y muestra el nuevo valor
+        function modificarEdad() {
+            persona.modificarEdad(30); // Modificar la edad
+            alert("La nueva edad de " + persona.nombre + " es: " + persona.edad);
+        }
+    </script>
+</body>
+</html>

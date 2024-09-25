@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Trabajo Practico 7</title>
 </head>
 
 <body>
-    <header>
-        
+    <header id="header">
     </header>
-    <button onclick="titulo">Titulo</button>
+    
+    <button onclick="titulo()">Titulo</button>
+    
     <fieldset>
         <form>
             <h1>FORMULARIO</h1>
@@ -35,45 +36,57 @@
                 <label for="fecha-nacimiento">Fecha de Nacimiento:</label>
                 <input type="date" id="fecha-nacimiento" required><br><br>
             </p>
-
-
-            <button>Enviar</button>
+            <button type="submit">Enviar</button>
         </form>
     </fieldset>
-    <button onclick="completardatos">Completar nombre y apellido</button>
-    <button onclick="crearbotones">Sexo</button>
+    
+    <button onclick="completardatos()">Completar nombre y apellido</button>
+    <button onclick="crearbotones()">Sexo</button>
+    
     <section></section>
 
     <script>
         function completardatos() {
-            var elemento = document.getElementById('nombre');
-            elemento.innerHTML = "Selene";
-            var elemento = document.getElementById('apellido');
-            elemento.innerHTML = "Luciano";
+            var nombreElemento = document.getElementById('nombre');
+            nombreElemento.value = "Selene";
+            
+            var apellidoElemento = document.getElementById('apellido');
+            apellidoElemento.value = "Luciano";
         }
+
         function crearbotones() {
-            var elementos = document.getElementsByTagName('section');
-            var p1 = document.createElement('button');
-            var femenino = document.createTextNode('Femenino');
-            p1.appendChild(femenino);
-            var p2 = document.createElement('button');
-            var masculino = document.createTextNode('Masculino');
-            p2.appendChild(masculino);
-            for(var i= 0; i< elementos.length;i++){
-                elementos[i].appendChild(p1);
-                elementos[i].appendChild(p2);
-            }
-        }
-        function titulo() {
-            var elementos = document.getElementsById('header');
-            var h1 = document.createElement('h1');
-            var t = document.createTextNode('DATOS PERSONALES');
-            h1.appendChild(t);
-            for(var i= 0; i< elementos.length;i++){
-                elementos[i].appendChild(h1);
+            var section = document.querySelector('section');
+
+            // Verificar si los botones ya existen
+            if (!document.getElementById('btnFemenino') && !document.getElementById('btnMasculino')) {
+                var p1 = document.createElement('button');
+                p1.setAttribute('id', 'btnFemenino');
+                var femenino = document.createTextNode('Femenino');
+                p1.appendChild(femenino);
+                
+                var p2 = document.createElement('button');
+                p2.setAttribute('id', 'btnMasculino');
+                var masculino = document.createTextNode('Masculino');
+                p2.appendChild(masculino);
+                
+                section.appendChild(p1);
+                section.appendChild(p2);
             }
         }
 
+        function titulo() {
+            var header = document.getElementById('header');
+            
+            // Verificar si el título ya fue agregado
+            if (!document.getElementById('tituloHeader')) {
+                var h1 = document.createElement('h1');
+                h1.setAttribute('id', 'tituloHeader');
+                var t = document.createTextNode('DATOS PERSONALES');
+                h1.appendChild(t);
+                
+                header.appendChild(h1);
+            }
+        }
     </script>
 </body>
 

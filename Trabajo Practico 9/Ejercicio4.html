@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 4</title>
+      <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h1>Objeto Constructor en JavaScript</h1>
+
+    <script>
+        // Definir un constructor de objeto
+        function Persona(nombre, edad, profesion) {
+            this.nombre = nombre;
+            this.edad = edad;
+            this.profesion = profesion;
+
+            // Método para mostrar información
+            this.mostrarInfo = function() {
+                return `Nombre: ${this.nombre}, Edad: ${this.edad}, Profesión: ${this.profesion}`;
+            };
+
+            // Método para modificar la profesión
+            this.cambiarProfesion = function(nuevaProfesion) {
+                this.profesion = nuevaProfesion;
+            };
+        }
+
+        // Crear una instancia del objeto Persona
+        const persona1 = new Persona("María", 32, "Arquitecta");
+
+        // Usar el método para mostrar información
+        console.log(persona1.mostrarInfo());
+
+        // Cambiar la profesión de la persona
+        persona1.cambiarProfesion("Ingeniera");
+
+        // Mostrar la información actualizada
+        console.log("Información actualizada:");
+        console.log(persona1.mostrarInfo());
+    </script>
+</body>
+</html>
