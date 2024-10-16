@@ -1,5 +1,4 @@
-// controllers/productController.js
-const { Product } = require('../models/productModels');
+const Product = require('../models/productModels');
 
 // Obtener todos los productos
 exports.getProducts = async (req, res) => {
@@ -7,45 +6,46 @@ exports.getProducts = async (req, res) => {
         const products = await Product.findAll();
         res.json(products);
     } catch (error) {
-        console.error('Error al obtener productos:', error);
-        res.status(500).send('Error interno del servidor');
+        res.status(500).send('Error al obtener los productos');
     }
 };
 
-// Crear un nuevo producto
+// Crear nuevo producto
 exports.createProduct = async (req, res) => {
     try {
-        const { name, price, description } = req.body;
-        const newProduct = await Product.create({ name, price, description });
-        res.status(201).json(newProduct);
+        const { name, description, price, stock } = req.body;
+        await Product.create({ name, description, price, stock });
+        res.status(201).json({ message: 'Producto creado' });
     } catch (error) {
-        console.error('Error al crear producto:', error);
-        res.status(500).send('Error interno del servidor');
+        res.status(500).send('Error al crear el producto');
     }
 };
 
-// Eliminar un producto por ID
+// Eliminar producto
 exports.deleteProduct = async (req, res) => {
     try {
-        const id = req.params.id;
-        await Product.destroy({ where: { id } });
-        res.sendStatus(204); // No content
+        const { id } = req.params;
+        const deletedCount = await Product.destroy({ where: { id } });
+
+        if (deletedCount > 0) {
+            res.status(200).json({ message: 'Producto eliminado' });
+        } else {
+            res.status(404).json({ message: 'Producto no encontrado' });
+        }
     } catch (error) {
         console.error('Error al eliminar producto:', error);
-        res.status(500).send('Error interno del servidor');
+        res.status(500).send('Error al eliminar el producto');
     }
 };
 
-// Actualizar un producto por ID
+// Actualizar producto
 exports.updateProduct = async (req, res) => {
     try {
-        const id = req.params.id;
-        const { name, price, description } = req.body;
-        await Product.update({ name, price, description }, { where: { id } });
-        res.sendStatus(204); // No content
+        const { id } = req.params;
+        const { name, description, price, stock } = req.body;
+        await Product.update({ name, description, price, stock }, { where: { id } });
+        res.status(200).json({ message: 'Producto actualizado' });
     } catch (error) {
-        console.error('Error al actualizar producto:', error);
-        res.status(500).send('Error interno del servidor');
+        res.status(500).send('Error al actualizar el producto');
     }
-};
-
+}

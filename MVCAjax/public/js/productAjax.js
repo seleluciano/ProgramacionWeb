@@ -1,24 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
     const productForm = document.getElementById('product-form');
-    const productList = document.getElementById('product-list');
 
     // Cargar productos al cargar la página
     loadProducts();
 
-    // Agregar nuevo producto con AJAX
+    // Inicializar modal
+    var elems = document.querySelectorAll('.modal');
+    M.Modal.init(elems);
+
+    // Agregar o actualizar un producto con AJAX
     productForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const id = document.getElementById('product-id').value; // Obtener el ID
-        const name = document.getElementById('product-name').value;
-        const description = document.getElementById('product-description').value;
-        const price = document.getElementById('product-price').value;
-        const stock = document.getElementById('product-stock').value;
 
+        // Obtener valores del formulario
+        const id = document.getElementById('product-id').value;
+        const name = document.getElementById('name').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const price = parseFloat(document.getElementById('price').value);
+        const stock = parseInt(document.getElementById('stock').value);
+
+        // Verificar que todos los campos estén completos
+        if (!name || !description || isNaN(price) || isNaN(stock)) {
+            M.toast({ html: 'Por favor, completa todos los campos correctamente.' });
+            return;
+        }
+
+        // Si hay un ID, se está editando, si no, se está agregando
         if (id) {
-            // Si hay un ID, se está editando un producto
             await updateProduct(id, name, description, price, stock);
         } else {
-            // Si no hay ID, se está añadiendo un nuevo producto
             await addProduct(name, description, price, stock);
         }
 
@@ -28,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Función para cargar productos
+// Función para cargar productos divididos en columnas
 async function loadProducts() {
     const productList = document.getElementById('product-list');
     try {
@@ -36,14 +46,33 @@ async function loadProducts() {
         const data = await response.json();
         productList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos productos
 
-        data.forEach(product => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                ${product.name} - ${product.description} - $${product.price} - Stock: ${product.stock}
-                <button class="btn red" onclick="deleteProduct(${product.id})"><i class="material-icons">delete</i></button>
-                <button class="btn blue" onclick="editProduct(${product.id}, '${product.name}', '${product.description}', ${product.price}, ${product.stock})"><i class="material-icons">edit</i></button>
-                <br><br>`;
-            productList.appendChild(li);
+        let col;
+        data.forEach((product, index) => {
+            if (index % 4 === 0) {
+                col = document.createElement('div');
+                col.classList.add('col', 's12', 'm6'); // Columnas en pantallas pequeñas y medianas
+                productList.appendChild(col);
+            }
+
+            const productCard = document.createElement('div');
+            productCard.classList.add('card', 'black', 'darken-1');
+            productCard.innerHTML = `
+                <div class="card-content white-text">
+                    <span class="card-title">${product.name}</span>
+                    <p>${product.description}</p>
+                    <p>Precio: ${product.price}</p>
+                    <p>Stock: ${product.stock}</p>
+                </div>
+                <div class="card-action">
+                    <a class="btn red" onclick="deleteProduct(${product.id})">
+                        <i class="material-icons">Eliminar</i> 
+                    </a>
+                    <a class="btn blue" onclick="editProduct(${product.id}, '${product.name}', '${product.description}', ${product.price}, ${product.stock})">
+                        <i class="material-icons">Editar</i> 
+                    </a>
+                </div>
+            `;
+            col.appendChild(productCard);
         });
     } catch (error) {
         console.error('Error al cargar productos:', error);
@@ -62,9 +91,9 @@ async function addProduct(name, description, price, stock) {
         });
 
         if (response.ok) {
-            M.toast({html: 'Producto agregado correctamente'}); // Mensaje de éxito
+            M.toast({ html: 'Producto agregado correctamente' }); // Materialize Toast
         } else {
-            M.toast({html: 'Error al agregar producto'}); // Mensaje de error
+            M.toast({ html: 'Error al agregar producto' }); // Materialize Toast
         }
     } catch (error) {
         console.error('Error:', error);
@@ -74,7 +103,7 @@ async function addProduct(name, description, price, stock) {
 // Función para eliminar producto
 async function deleteProduct(id) {
     const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este producto?");
-    if (!confirmDelete) return; // Si el usuario cancela, no hacer nada
+    if (!confirmDelete) return;
 
     try {
         const response = await fetch(`/products/delete/${id}`, {
@@ -82,10 +111,10 @@ async function deleteProduct(id) {
         });
 
         if (response.ok) {
-            M.toast({html: 'Producto eliminado'}); // Mensaje de éxito
-            loadProducts();  // Recargar lista de productos
+            M.toast({ html: 'Producto eliminado correctamente' }); // Materialize Toast
+            loadProducts();
         } else {
-            M.toast({html: 'Error al eliminar producto'}); // Mensaje de error
+            M.toast({ html: 'Error al eliminar producto' }); // Materialize Toast
         }
     } catch (error) {
         console.error('Error:', error);
@@ -95,10 +124,13 @@ async function deleteProduct(id) {
 // Función para editar producto
 function editProduct(id, name, description, price, stock) {
     document.getElementById('product-id').value = id; // Establecer ID en el formulario
-    document.getElementById('product-name').value = name; // Establecer nombre en el formulario
-    document.getElementById('product-description').value = description; // Establecer descripción
-    document.getElementById('product-price').value = price; // Establecer precio
-    document.getElementById('product-stock').value = stock; // Establecer stock
+    document.getElementById('name').value = name; // Establecer nombre
+    document.getElementById('description').value = description; // Establecer descripción
+    document.getElementById('price').value = price; // Establecer precio
+    document.getElementById('stock').value = stock; // Establecer stock
+
+    const modal = M.Modal.getInstance(document.getElementById('modal-edit'));
+    modal.open(); // Abrir el modal de edición
 }
 
 // Función para actualizar un producto
@@ -113,12 +145,11 @@ async function updateProduct(id, name, description, price, stock) {
         });
 
         if (response.ok) {
-            M.toast({html: 'Producto actualizado correctamente'}); // Mensaje de éxito
+            M.toast({ html: 'Producto actualizado correctamente' }); // Materialize Toast
         } else {
-            M.toast({html: 'Error al actualizar producto'}); // Mensaje de error
+            M.toast({ html: 'Error al actualizar producto' }); // Materialize Toast
         }
     } catch (error) {
         console.error('Error:', error);
     }
-}
-
+};

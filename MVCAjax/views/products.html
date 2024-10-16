@@ -1,74 +1,75 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Importando Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+    <!-- Importando Materialize JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Productos</title>
 </head>
+
 <body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">Mi Aplicación</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="index.html" class="btn">Ir a Usuarios</a></li> <!-- Botón para dirigir a usuarios -->
+            </ul>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1 class="center-align">Gestión de Productos</h1>
-        
-        <!-- Formulario para agregar productos -->
-        <div class="row">
-            <form id="product-form" class="col s12">
-                <input type="hidden" id="product-id">
-                <div class="input-field col s6">
-                    <input type="text" id="product-name" required>
-                    <label for="product-name">Nombre del Producto</label>
+        <h2>Crear Producto</h2>
+        <!-- Formulario para añadir producto -->
+        <form id="product-form">
+            <input type="hidden" id="product-id"> <!-- Campo oculto para ID del producto -->
+            <input type="text" id="name" placeholder="Nombre del Producto" required>
+            <input type="text" id="description" placeholder="Descripción" required>
+            <input type="number" id="price" placeholder="Precio" required>
+            <input type="number" id="stock" placeholder="Stock" required>
+            <button type="submit" class="btn">Añadir Producto</button>
+        </form>
+
+        <h2>Lista de Productos</h2>
+        <!-- Lista de productos -->
+        <div class="row" id="product-list"></div> <!-- Aquí se mostrará la lista en columnas -->
+    </div>
+
+    <!-- Modal para editar producto -->
+    <div id="modal-edit" class="modal">
+        <div class="modal-content">
+            <h4>Editar Producto</h4>
+            <form id="product-form">
+                <input type="hidden" id="product-id" /> <!-- ID del producto -->
+                <div class="input-field">
+                    <input type="text" id="product-name" required />
+                    <label for="product-name">Nombre</label>
                 </div>
-                <div class="input-field col s6">
-                    <input type="text" id="product-price" required>
-                    <label for="product-price">Precio del Producto</label>
+                <div class="input-field">
+                    <input type="text" id="product-description" required />
+                    <label for="product-description">Descripción</label>
                 </div>
-                <div class="input-field col s6">
-                    <input type="text" id="product-stock" required>
-                    <label for="product-stock">Stock del Producto</label>
+                <div class="input-field">
+                    <input type="number" id="product-price" required />
+                    <label for="product-price">Precio</label>
                 </div>
-                <div class="input-field col s6">
-                    <input type="text" id="product-description" required>
-                    <label for="product-description">Descripción del Producto</label>
+                <div class="input-field">
+                    <input type="number" id="product-stock" required />
+                    <label for="product-stock">Stock</label>
                 </div>
-                <div class="input-field col s12">
-                    <button type="submit" class="btn blue">Agregar Producto</button>
-                </div>
+                <button type="submit" class="waves-effect waves-light btn">Actualizar Producto</button>
             </form>
         </div>
-
-        <!-- Lista de productos -->
-        <div id="product-list" class="row"></div>
-
-        <!-- Modal para editar producto -->
-        <div id="modal-edit" class="modal">
-            <div class="modal-content">
-                <h4>Editar Producto</h4>
-                <form id="edit-product-form">
-                    <input type="hidden" id="edit-product-id">
-                    <div class="input-field">
-                        <input type="text" id="edit-product-name" required>
-                        <label for="edit-product-name">Nombre del Producto</label>
-                    </div>
-                    <div class="input-field">
-                        <input type="text" id="edit-product-price" required>
-                        <label for="edit-product-price">Precio del Producto</label>
-                    </div>
-                    <div class="input-field">
-                        <input type="text" id="edit-product-stock" required>
-                        <label for="edit-product-stock">Stock del Producto</label>
-                    </div>
-                    <div class="input-field">
-                        <input type="text" id="edit-product-description" required>
-                        <label for="edit-product-description">Descripción del Producto</label>
-                    </div>
-                    <button type="submit" class="btn blue">Actualizar Producto</button>
-                </form>
-            </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
         </div>
     </div>
 
-    <script src="js/productAjax.js"></script>
-    
+    <script src="/js/productAjax.js"></script>
 </body>
+
 </html>
