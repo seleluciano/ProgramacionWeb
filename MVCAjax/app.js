@@ -22,7 +22,9 @@ app.get('/', (req, res) => {
 app.get('/products', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'products.html'));
 });
-
+app.get('/products.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'products.html')); // Asegúrate de que la ruta sea correcta
+});
 // Iniciar el servidor en el puerto 3000
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
