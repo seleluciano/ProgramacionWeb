@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Importando Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <!-- Importando Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Productos</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Crear Producto</h2>
+        <!-- Formulario para añadir producto -->
+        <form id="product-form">
+            <input type="hidden" id="product-id"> <!-- Campo oculto para ID de producto -->
+            <div class="input-field">
+                <input type="text" id="product-name" required>
+                <label for="product-name">Nombre del Producto</label>
+            </div>
+            <div class="input-field">
+                <input type="text" id="product-description" required>
+                <label for="product-description">Descripción</label>
+            </div>
+            <div class="input-field">
+                <input type="number" id="product-price" step="0.01" required>
+                <label for="product-price">Precio</label>
+            </div>
+            <div class="input-field">
+                <input type="number" id="product-stock" required>
+                <label for="product-stock">Stock</label>
+            </div>
+            <button type="submit" class="waves-effect waves-light btn">Añadir Producto</button>
+        </form>
+        
+        <h2>Lista de Productos</h2>
+        <!-- Lista de productos -->
+        <ul id="product-list"></ul>
+    </div>
+
+    <!-- Modal para editar producto -->
+    <div id="modal-edit-product" class="modal">
+        <div class="modal-content">
+            <h4>Editar Producto</h4>
+            <!-- Formulario para editar producto -->
+            <form id="edit-product-form">
+                <input type="hidden" id="edit-product-id" /> <!-- Campo oculto para el ID del producto -->
+                <div class="input-field">
+                    <input type="text" id="edit-product-name" required />
+                    <label for="edit-product-name">Nombre del Producto</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit-product-description" required />
+                    <label for="edit-product-description">Descripción</label>
+                </div>
+                <div class="input-field">
+                    <input type="number" id="edit-product-price" step="0.01" required />
+                    <label for="edit-product-price">Precio</label>
+                </div>
+                <div class="input-field">
+                    <input type="number" id="edit-product-stock" required />
+                    <label for="edit-product-stock">Stock</label>
+                </div>
+                <button type="submit" class="waves-effect waves-light btn">Actualizar Producto</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/productAjax.js"></script>
+</body>
+
+</html>
+

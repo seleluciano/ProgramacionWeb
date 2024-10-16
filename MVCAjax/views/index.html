@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Importando Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+    <!-- Importando Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Usuarios</title>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">Mi Aplicación</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/products" class="btn">Ir a Productos</a></li> <!-- Botón para dirigir a productos -->
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h2>Crear Usuario</h2>
+        <!-- Formulario para añadir usuario -->
+        <form id="user-form">
+            <input type="hidden" id="user-id"> <!-- Campo oculto para ID de usuario -->
+            <input type="text" id="name" placeholder="Nombre" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <button type="submit" class="btn">Añadir Usuario</button>
+        </form>
+
+        <h2>Lista de Usuarios</h2>
+        <!-- Lista de usuarios -->
+        <div class="row" id="user-list"></div> <!-- Aquí se mostrará la lista en columnas -->
+    </div>
+
+    <!-- Modal para editar usuario -->
+    <div id="modal-edit" class="modal">
+        <div class="modal-content">
+            <h4>Editar Usuario</h4>
+            <!-- Formulario para editar usuario -->
+            <form id="edit-user-form">
+                <input type="hidden" id="edit-user-id" /> <!-- Campo oculto para el ID del usuario -->
+                <div class="input-field">
+                    <input type="text" id="edit-name" required />
+                    <label for="edit-name">Nombre</label>
+                </div>
+                <div class="input-field">
+                    <input type="email" id="edit-email" required />
+                    <label for="edit-email">Email</label>
+                </div>
+                <button type="submit" class="waves-effect waves-light btn">Actualizar Usuario</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
+        </div>
+    </div>
+
+    <script src="/js/userAjax.js"></script>
+
+</body>
+
+</html>
