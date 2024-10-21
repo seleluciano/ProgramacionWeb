@@ -1,58 +1,58 @@
-
-const Usuario = require('../models/UserModels'); // Ajusta la ruta según tu estructura
-const bcrypt = require('bcryptjs'); // Usa bcryptjs si lo instalaste
+const Usuario = require('../models/userModels');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// Controlador para registrar un nuevo usuario
+// Función para registrar un usuario
 const registrarUsuario = async (req, res) => {
-  const { nombre, apellido, email, password } = req.body;
+    const { nombre, apellido, email, password } = req.body;
 
-  try {
-    const existeUsuario = await Usuario.findOne({ where: { email } });
-    if (existeUsuario) {
-      return res.status(400).json({ message: 'El email ya está en uso.' });
+    try {
+        // Hashear la contraseña antes de guardar
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Crear el nuevo usuario
+        const usuario = await Usuario.create({
+            nombre,
+            apellido,
+            email,
+            password: hashedPassword
+        });
+
+        res.status(201).json({ message: 'Usuario registrado con éxito', usuario });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al registrar el usuario' });
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const nuevoUsuario = await Usuario.create({
-      nombre,
-      apellido,
-      email,
-      password: hashedPassword
-    });
-
-    return res.status(201).json({ message: 'Usuario registrado exitosamente.', usuario: nuevoUsuario });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Error al registrar el usuario.' });
-  }
 };
 
-// Controlador para iniciar sesión
+// Función para iniciar sesión
 const iniciarSesion = async (req, res) => {
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  try {
-    const usuario = await Usuario.findOne({ where: { email } });
-    if (!usuario) {
-      return res.status(401).json({ message: 'Credenciales inválidas.' });
+    try {
+        // Buscar el usuario por email
+        const usuario = await Usuario.findOne({ where: { email } });
+        if (!usuario) {
+            return res.status(401).json({ message: 'Credenciales incorrectas' });
+        }
+
+        // Comparar contraseñas
+        const esPasswordValido = await bcrypt.compare(password, usuario.password);
+        if (!esPasswordValido) {
+            return res.status(401).json({ message: 'Credenciales incorrectas' });
+        }
+
+        // Generar el token JWT
+        const token = jwt.sign({ id: usuario.id }, 'tu_secreto', { expiresIn: '1h' });
+        
+        res.status(200).json({ message: 'Inicio de sesión exitoso', accessToken: token });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al iniciar sesión' });
     }
-
-    const passwordValido = await bcrypt.compare(password, usuario.password);
-    if (!passwordValido) {
-      return res.status(401).json({ message: 'Credenciales inválidas.' });
-    }
-
-    const token = jwt.sign({ id: usuario.id }, 'tu_secreto', { expiresIn: '1h' });
-
-    return res.status(200).json({ message: 'Inicio de sesión exitoso.', token });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Error al iniciar sesión.' });
-  }
 };
 
 module.exports = {
-  registrarUsuario,
-  iniciarSesion
+    registrarUsuario,
+    iniciarSesion
 };

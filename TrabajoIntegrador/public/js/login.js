@@ -1,28 +1,24 @@
-$(document).ready(function() {
-    $('#loginForm').on('submit', function(event) {
-        event.preventDefault(); // Evitar que el formulario se envíe de la manera tradicional
+document.getElementById('login-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-        // Obtener datos del formulario
-        const email = $('#email').val();
-        const password = $('#password').val();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
 
-        // Realizar la solicitud AJAX
-        $.ajax({
-            type: 'POST',
-            url: '/usuarios/iniciar-sesion', // Asegúrate de que esta sea la ruta correcta
-            data: {
-                email: email,
-                password: password
-            },
-            success: function(response) {
-                // Aquí puedes manejar la respuesta exitosa
-                $('#mensaje').text(response.message).css('color', 'green').show();
-                // Redireccionar o hacer algo más
-            },
-            error: function(xhr) {
-                // Aquí puedes manejar el error
-                $('#mensaje').text(xhr.responseJSON.message).css('color', 'red').show();
-            }
+    try {
+        const response = await fetch('/usuarios/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         });
-    });
+
+        const result = await response.json();
+        alert(result.message);
+        if (response.ok) {
+            // Guardar el token en localStorage y redirigir
+            localStorage.setItem('token', result.accessToken);
+            window.location.href = '/tareas'; // Cambiar a la ruta de tareas
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
 });
