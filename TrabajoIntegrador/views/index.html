@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Tareas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/index.js" defer></script> <!-- Incluir tu archivo JS aquí -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>LISTADO DE TAREAS</h1>
+        
+        <div class="row">
+            <div class="col s6">
+                <a href="#!" onclick="abrirModalAgregar()">
+                    <img src="/img/agregar.png" alt="Modificar" style="width: 50px; height: 50px;">
+                    </a>
+            </div>
+            <div class="col s6 right-align">
+                <a href="#!" onclick="filtrarTareas()">
+                    <img src="/img/filtro.png" alt="Modificar" style="width: 50px; height: 50px;">
+                    </a>
+            </div>
+        </div>
+
+        <table class="striped" style="font-size: 1.2em;">
+            <thead>
+                <tr>
+                    <th style="font-size: 1.2em;">Nombre</th>
+                    <th style="font-size: 1.2em;">Descripción</th>
+                    <th style="font-size: 1.2em;">Dificultad</th>
+                    <th style="font-size: 1.2em;">Fecha Vencimiento</th>
+                    <th style="font-size: 1.2em;">Completada</th>
+                    <th style="font-size: 1.2em;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tareas-listado">
+                <!-- Aquí se llenarán las tareas dinámicamente -->
+            </tbody>
+        </table>
+        
+    </div>
+
+    <!-- Modal para agregar tarea -->
+    <div id="modal-agregar" class="modal">
+        <div class="modal-content">
+            <h4>Agregar Tarea</h4>
+            <div class="input-field">
+                <input type="text" id="nombre" placeholder="Nombre de la tarea" required>
+            </div>
+            <div class="input-field">
+                <input type="text" id="descripcion" placeholder="Descripción de la tarea">
+            </div>
+            <div class="input-field">
+                <select id="dificultad">
+                    <option value="" disabled selected>Dificultad</option>
+                    <option value="Fácil">Fácil</option>
+                    <option value="Media">Media</option>
+                    <option value="Difícil">Difícil</option>
+                </select>
+            </div>
+            <div class="input-field">
+                <input type="date" id="fechaVencimiento" required>
+            </div>
+            <p>
+                <label>
+                    <input type="checkbox" id="completada" />
+                    <span>Completada</span>
+                </label>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close btn" onclick="guardarTarea()">Guardar</a>
+            <a href="#!" class="modal-close btn red">Cancelar</a>
+        </div>
+    </div>
+
+    <!-- Modal para modificar tarea -->
+    <div id="modal-modificar" class="modal">
+        <div class="modal-content">
+            <h4>Modificar Tarea</h4>
+            <input type="hidden" id="modificar-id" />
+            <div class="input-field">
+                <input type="text" id="modificar-nombre" placeholder="Nombre de la tarea" required>
+            </div>
+            <div class="input-field">
+                <input type="text" id="modificar-descripcion" placeholder="Descripción de la tarea">
+            </div>
+            <div class="input-field">
+                <select id="modificar-dificultad">
+                    <option value="" disabled selected>Dificultad</option>
+                    <option value="Fácil">Fácil</option>
+                    <option value="Media">Media</option>
+                    <option value="Difícil">Difícil</option>
+                </select>
+            </div>
+            <div class="input-field">
+                <input type="date" id="modificar-fechaVencimiento" required>
+            </div>
+            <p>
+                <label>
+                    <input type="checkbox" id="modificar-completada" />
+                    <span>Completada</span>
+                </label>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close btn" onclick="modificarTarea()">Guardar Cambios</a>
+            <a href="#!" class="modal-close btn red">Cancelar</a>
+        </div>
+    </div>
+
+</body>
+</html>

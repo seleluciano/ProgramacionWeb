@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Incluir jQuery -->
+    <script src="/js/login.js" defer></script> <!-- Incluir tu archivo JS aquí -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Iniciar Sesión</title>
+</head>
+<body>
+    <section>
+        <h2>Iniciar Sesión</h2>
+        <form id="loginForm">
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" name="password" id="password" required>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+        <div id="mensaje" style="display:none;"></div> <!-- Mensaje para mostrar el resultado -->
+    </section>
+</body>
+</html>
+
