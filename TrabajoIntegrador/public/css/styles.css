@@ -7,8 +7,6 @@ body {
 .modal {
     background-color: #E1B7E6; /* Lila pastel */
     color: #000; /* Color del texto */
-    color: black; /* Cambia el color de la letra a negro */
-
 }
 
 .modal .modal-content {
@@ -36,4 +34,25 @@ form label, form input, form textarea, form select, form button {
 }
 h1{
     text-align: center;
+}
+input::placeholder {
+    color: #ff5733; /* Cambia a tu color deseado */
+    opacity: 1; /* Asegúrate de que sea completamente visible */
+}
+
+/* Para navegadores que necesiten prefijos */
+input::-webkit-input-placeholder {
+    color: black;
+}
+
+input:-moz-placeholder {
+    color: black;
+}
+
+input::-moz-placeholder {
+    color: black;
+}
+
+input:-ms-input-placeholder {
+    color: black;
 }

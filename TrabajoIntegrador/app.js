@@ -13,15 +13,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Configuración del body parser para formularios
 app.use(express.urlencoded({ extended: true }));
 
-// Rutas
-app.use('/usuarios', userRoutes);
-app.use('/tareas', taskRoutes);
+// Uso de rutas
+app.use('/usuarios', userRoutes);  // Rutas de usuarios
+app.use('/tareas', taskRoutes);    // Rutas de tareas
 
-// Servir vistas estáticas
+// Ruta principal
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
+// Servir vistas de login y register
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });

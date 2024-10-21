@@ -17,19 +17,60 @@ function abrirModalAgregar() {
     const instance = M.Modal.init(modal);
     instance.open();
 }
+//Funcion para el modal del filtrar
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+    var selectElems = document.querySelectorAll('select');
+    M.FormSelect.init(selectElems);
+});
 
 // Función para filtrar tareas
 function filtrarTareas() {
-    // Aquí implementa tu lógica de filtrado
-    mostrarToast('Función de filtrado aún no implementada');
-}
+    const estado = document.getElementById('filtroEstado').value;
+    const nombre = document.getElementById('filtroNombre').value.toLowerCase();
+    const descripcion = document.getElementById('filtroDescripcion').value.toLowerCase();
+    const fecha = document.getElementById('filtroFecha').value;
 
-// Simulación de listado de tareas
-let tareas = [
-    { id: 1, nombre: 'Tarea 1', descripcion: 'Descripción 1', dificultad: 'Fácil', fechaVencimiento: '2024-10-31', completada: false },
-    { id: 2, nombre: 'Tarea 2', descripcion: 'Descripción 2', dificultad: 'Media', fechaVencimiento: '2024-11-05', completada: false },
-    { id: 3, nombre: 'Tarea 3', descripcion: 'Descripción 3', dificultad: 'Difícil', fechaVencimiento: '2024-11-10', completada: false }
-];
+    const tareas = JSON.parse(localStorage.getItem('tareas')) || []; // Supongo que tienes las tareas en localStorage
+
+    // Filtrar las tareas basadas en los valores introducidos
+    const tareasFiltradas = tareas.filter(tarea => {
+        const cumpleEstado = (estado === 'completada' && tarea.completada) || (estado === 'noCompletada' && !tarea.completada) || !estado;
+        const cumpleNombre = !nombre || tarea.nombre.toLowerCase().includes(nombre);
+        const cumpleDescripcion = !descripcion || tarea.descripcion.toLowerCase().includes(descripcion);
+        const cumpleFecha = !fecha || new Date(tarea.fechaVencimiento).toISOString().split('T')[0] === fecha;
+
+        return cumpleEstado && cumpleNombre && cumpleDescripcion && cumpleFecha;
+    });
+
+    // Mostrar tareas filtradas
+    mostrarTareas(tareasFiltradas);
+}
+let tareas = []; 
+
+// Función para mostrar tareas (tienes que adaptar esta parte si ya tienes una)
+function mostrarTareas(tareas) {
+    const tareasListado = document.getElementById('tareas-listado');
+    tareasListado.innerHTML = ''; // Limpiar la lista de tareas
+
+    tareas.forEach(tarea => {
+        tareasListado.innerHTML += `
+            <tr>
+                <td style="font-size: 1.2em;">${tarea.nombre}</td>
+                <td style="font-size: 1.2em;">${tarea.descripcion}</td>
+                <td style="font-size: 1.2em;">${tarea.dificultad}</td>
+                <td style="font-size: 1.2em;">${new Date(tarea.fechaVencimiento).toLocaleDateString()}</td>
+                <td style="font-size: 1.2em;">${tarea.completada ? 'Sí' : 'No'}</td>
+              <td>
+                    <a href="#!" onclick="eliminarTarea(${tarea.id})">
+                        <img src="/img/basurero.png" alt="Eliminar" style="width: 32px; height: 32px;">
+                    </a>
+                </td>
+            </tr>
+        `;
+    });
+}
 
 // Función para mostrar tareas
 function mostrarTareas() {

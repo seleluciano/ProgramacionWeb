@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,20 +10,21 @@
     <script src="/js/index.js" defer></script> <!-- Incluir tu archivo JS aquí -->
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
     <div class="container">
         <h1>LISTADO DE TAREAS</h1>
-        
+
         <div class="row">
             <div class="col s6">
                 <a href="#!" onclick="abrirModalAgregar()">
                     <img src="/img/agregar.png" alt="Modificar" style="width: 50px; height: 50px;">
-                    </a>
+                </a>
             </div>
             <div class="col s6 right-align">
-                <a href="#!" onclick="filtrarTareas()">
+                <a href="#!"  class="btn-flat modal-trigger" data-target="filtrarModal">
                     <img src="/img/filtro.png" alt="Modificar" style="width: 50px; height: 50px;">
-                    </a>
+                </a>
             </div>
         </div>
 
@@ -41,7 +43,7 @@
                 <!-- Aquí se llenarán las tareas dinámicamente -->
             </tbody>
         </table>
-        
+
     </div>
 
     <!-- Modal para agregar tarea -->
@@ -49,10 +51,10 @@
         <div class="modal-content">
             <h4>Agregar Tarea</h4>
             <div class="input-field">
-                <input type="text" id="nombre" placeholder="Nombre de la tarea" required>
+                <input type="text" id="nombre" placeholder="Nombre de la tarea" required >
             </div>
             <div class="input-field">
-                <input type="text" id="descripcion" placeholder="Descripción de la tarea">
+                <input type="text" id="descripcion" placeholder="Descripción de la tarea" >
             </div>
             <div class="input-field">
                 <select id="dificultad">
@@ -67,8 +69,8 @@
             </div>
             <p>
                 <label>
-                    <input type="checkbox" id="completada" />
-                    <span>Completada</span>
+                    <input type="checkbox" id="completada"/>
+                    <span style="color: black;">Completada</span>
                 </label>
             </p>
         </div>
@@ -112,6 +114,38 @@
             <a href="#!" class="modal-close btn red">Cancelar</a>
         </div>
     </div>
-
+    <!-- Modal de filtrado -->
+    <div id="filtrarModal" class="modal">
+        <div class="modal-content">
+            <h4>Filtrar Tareas</h4>
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="filtroEstado">
+                        <option value="" disabled selected>Filtrar por estado</option>
+                        <option value="completada">Completada</option>
+                        <option value="noCompletada">No Completada</option>
+                    </select>
+                    <label>Estado</label>
+                </div>
+                <div class="input-field col s12">
+                    <input type="text" id="filtroNombre" placeholder="Filtrar por nombre">
+                    <label for="filtroNombre">Nombre</label>
+                </div>
+                <div class="input-field col s12">
+                    <input type="text" id="filtroDescripcion" placeholder="Filtrar por descripción">
+                    <label for="filtroDescripcion">Descripción</label>
+                </div>
+                <div class="input-field col s12">
+                    <input type="date" id="filtroFecha" placeholder="Filtrar por fecha de vencimiento">
+                    <label for="filtroFecha">Fecha de Vencimiento</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat" onclick="filtrarTareas()">Filtrar</a>
+        </div>
+    </div>
 </body>
+
 </html>
