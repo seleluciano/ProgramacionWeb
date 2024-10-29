@@ -27,10 +27,10 @@
         <!-- Formulario para añadir producto -->
         <form id="product-form">
             <input type="hidden" id="product-id"> <!-- Campo oculto para ID del producto -->
-            <input type="text" id="name" placeholder="Nombre del Producto" required>
-            <input type="text" id="description" placeholder="Descripción" required>
-            <input type="number" id="price" placeholder="Precio" required>
-            <input type="number" id="stock" placeholder="Stock" required>
+            <p>Nombre: <input type="text" id="name" placeholder="Nombre del Producto" required></p>
+            <p>Descripción: <input type="text" id="description" placeholder="Descripción" required></p>
+            <p>Precio:<input type="number" id="price" placeholder="Precio" required></p>
+            <p>Stock:<input type="number" id="stock" placeholder="Stock" required></p>
             <button type="submit" class="btn">Añadir Producto</button>
         </form>
 
@@ -46,20 +46,24 @@
             <form id="product-form">
                 <input type="hidden" id="product-id" /> <!-- ID del producto -->
                 <div class="input-field">
-                    <input type="text" id="product-name" required />
-                    <label for="product-name">Nombre</label>
+                    <p>Nombre: <input type="text" id="product-name" required />
+                        <label for="product-name">Nombre</label>
+                    </p>
                 </div>
                 <div class="input-field">
-                    <input type="text" id="product-description" required />
-                    <label for="product-description">Descripción</label>
+                    <p>Descripción:<input type="text" id="product-description" required />
+                        <label for="product-description">Descripción</label>
+                    </p>
                 </div>
                 <div class="input-field">
-                    <input type="number" id="product-price" required />
-                    <label for="product-price">Precio</label>
+                    <p>Precio:<input type="number" id="product-price" required />
+                        <label for="product-price">Precio</label>
+                    </p>
                 </div>
                 <div class="input-field">
-                    <input type="number" id="product-stock" required />
-                    <label for="product-stock">Stock</label>
+                    <p>Stock:<input type="number" id="product-stock" required />
+                        <label for="product-stock">Stock</label>
+                    </p>
                 </div>
                 <button type="submit" class="waves-effect waves-light btn">Actualizar Producto</button>
             </form>
@@ -68,6 +72,18 @@
             <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
         </div>
     </div>
+ <!-- Modal para eliminar producto -->
+<div id="modal-delete" class="modal">
+    <div class="modal-content">
+        <h4>Eliminar Producto</h4>
+        <p>¿Estás seguro de que deseas eliminar el producto?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat blue">Cancelar</a>
+        <a href="#!" id="confirm-delete" class="waves-effect waves-red btn-flat red">Eliminar</a>
+    </div>
+</div>
+
 
     <script src="/js/productAjax.js"></script>
 </body>

@@ -1,36 +1,48 @@
 document.addEventListener('DOMContentLoaded', () => {
     const userForm = document.getElementById('user-form');
     const userList = document.getElementById('user-list');
+    let userToDelete = null; // Variable para almacenar el ID del usuario a eliminar
 
     // Cargar usuarios al cargar la página
     loadUsers();
 
-    // Inicializar modal
-    var elems = document.querySelectorAll('.modal');
-    M.Modal.init(elems);
+    // Inicializar modal de edición y guardar la instancia
+    const modalEditElem = document.getElementById('modal-edit');
+    const modalEditInstance = M.Modal.init(modalEditElem);
 
-    // Agregar nuevo usuario con AJAX
+    // Inicializar modal de eliminación y guardar la instancia
+    const modalDeleteElem = document.getElementById('modal-delete');
+    const modalDeleteInstance = M.Modal.init(modalDeleteElem);
+
+    // Agregar o actualizar un usuario con AJAX
     userForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const id = document.getElementById('user-id').value; // Obtener el ID
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
 
+        const id = document.getElementById('user-id').value; // Obtener el ID
+        const name = document.getElementById('edit-name').value.trim(); // Cambia 'name' a 'edit-name'
+        const email = document.getElementById('edit-email').value.trim(); // Cambia 'email' a 'edit-email'
+
+        // Verificar que todos los campos estén completos
+        if (!name || !email) {
+            M.toast({ html: 'Por favor, completa todos los campos correctamente.' });
+            return;
+        }
+
+        // Si hay un ID, se está editando, si no, se está añadiendo un nuevo usuario
         if (id) {
-            // Si hay un ID, se está editando un usuario
             await updateUser(id, name, email);
         } else {
-            // Si no hay ID, se está añadiendo un nuevo usuario
             await addUser(name, email);
         }
 
-        // Reiniciar el formulario
+        // Reiniciar el formulario, cerrar el modal y recargar la lista de usuarios
         userForm.reset();
+        modalEditInstance.close();
         loadUsers(); // Recargar la lista de usuarios
     });
 });
 
-// Función para cargar usuarios divididos en columnas de 10
+// Función para cargar usuarios
 async function loadUsers() {
     const userList = document.getElementById('user-list');
     try {
@@ -54,7 +66,7 @@ async function loadUsers() {
                     <p>${user.email}</p>
                 </div>
                 <div class="card-action">
-                    <a class="btn red" onclick="deleteUser(${user.id})">
+                    <a class="btn red" onclick="confirmDeleteUser(${user.id})">
                         <i class="material-icons">Eliminar</i> 
                     </a>
                     <a class="btn blue" onclick="editUser(${user.id}, '${user.name}', '${user.email}')">
@@ -81,44 +93,59 @@ async function addUser(name, email) {
         });
 
         if (response.ok) {
-            M.toast({ html: 'Usuario agregado correctamente' }); // Materialize Toast
+            M.toast({ html: 'Usuario agregado correctamente' });
         } else {
-            M.toast({ html: 'Error al agregar usuario' }); // Materialize Toast
+            M.toast({ html: 'Error al agregar usuario' });
         }
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
+// Manejador de evento para confirmar la eliminación
+document.getElementById('confirm-delete').addEventListener('click', async () => {
+    await deleteUser(); // Llamar a la función de eliminación
+});
+
+// Función para confirmar la eliminación de un usuario
+function confirmDeleteUser(id) {
+    userToDelete = id; // Almacenar el ID del usuario a eliminar
+    const modalInstance = M.Modal.getInstance(document.getElementById('modal-delete'));
+    modalInstance.open(); // Abrir el modal de confirmación de eliminación
+}
+
 // Función para eliminar usuario
-async function deleteUser(id) {
-    const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este usuario?");
-    if (!confirmDelete) return;
+async function deleteUser() {
+    if (!userToDelete) return; // Si no hay un usuario seleccionado, salir
 
     try {
-        const response = await fetch(`/users/delete/${id}`, {
+        const response = await fetch(`/users/delete/${userToDelete}`, {
             method: 'DELETE'
         });
 
         if (response.ok) {
-            M.toast({ html: 'Usuario eliminado correctamente' }); // Materialize Toast
-            loadUsers();
+            M.toast({ html: 'Usuario eliminado correctamente' });
+            loadUsers(); // Recargar la lista de usuarios
         } else {
-            M.toast({ html: 'Error al eliminar usuario' }); // Materialize Toast
+            M.toast({ html: 'Error al eliminar usuario' });
         }
     } catch (error) {
         console.error('Error:', error);
+    } finally {
+        userToDelete = null; // Reiniciar la variable de usuario a eliminar
+        const modalInstance = M.Modal.getInstance(document.getElementById('modal-delete'));
+        modalInstance.close(); // Cerrar el modal de confirmación
     }
 }
 
 // Función para editar usuario
 function editUser(id, name, email) {
     document.getElementById('user-id').value = id; // Establecer ID en el formulario
-    document.getElementById('name').value = name;  // Establecer nombre en el formulario
-    document.getElementById('email').value = email; // Establecer email en el formulario
+    document.getElementById('edit-name').value = name;  // Establecer nombre en el formulario
+    document.getElementById('edit-email').value = email; // Establecer email en el formulario
 
-    const modal = M.Modal.getInstance(document.getElementById('modal-edit'));
-    modal.open(); // Abrir el modal de edición
+    const modalEditInstance = M.Modal.getInstance(document.getElementById('modal-edit'));
+    modalEditInstance.open(); // Abrir el modal de edición
 }
 
 // Función para actualizar un usuario
@@ -133,9 +160,9 @@ async function updateUser(id, name, email) {
         });
 
         if (response.ok) {
-            M.toast({ html: 'Usuario actualizado correctamente' }); // Materialize Toast
+            M.toast({ html: 'Usuario actualizado correctamente' });
         } else {
-            M.toast({ html: 'Error al actualizar usuario' }); // Materialize Toast
+            M.toast({ html: 'Error al actualizar usuario' });
         }
     } catch (error) {
         console.error('Error:', error);

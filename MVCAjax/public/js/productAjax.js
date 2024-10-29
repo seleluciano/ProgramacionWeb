@@ -4,9 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cargar productos al cargar la página
     loadProducts();
 
-    // Inicializar modal
-    var elems = document.querySelectorAll('.modal');
-    M.Modal.init(elems);
+    // Inicializar modal de edición
+    const modalEditElem = document.getElementById('modal-edit');
+    const modalEditInstance = M.Modal.init(modalEditElem);
+
+    // Inicializar modal de confirmación de eliminación
+    const modalDeleteElem = document.getElementById('modal-delete');
+    const modalDeleteInstance = M.Modal.init(modalDeleteElem);
 
     // Agregar o actualizar un producto con AJAX
     productForm.addEventListener('submit', async (event) => {
@@ -25,15 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Si hay un ID, se está editando, si no, se está agregando
+        // Si hay un ID, se está editando; si no, se está agregando
         if (id) {
             await updateProduct(id, name, description, price, stock);
         } else {
             await addProduct(name, description, price, stock);
         }
 
-        // Reiniciar el formulario
+        // Reiniciar el formulario, cerrar el modal y recargar la lista de productos
         productForm.reset();
+        modalEditInstance.close();
         loadProducts(); // Recargar la lista de productos
     });
 });
@@ -64,10 +69,10 @@ async function loadProducts() {
                     <p>Stock: ${product.stock}</p>
                 </div>
                 <div class="card-action">
-                    <a class="btn red" onclick="deleteProduct(${product.id})">
+                    <a class="btn red" onclick="openDeleteProductModal(${product.id})">
                         <i class="material-icons">Eliminar</i> 
                     </a>
-                    <a class="btn blue" onclick="editProduct(${product.id}, '${product.name}', '${product.description}', ${product.price}, ${product.stock})">
+                    <a class="btn blue" onclick='editProduct(${JSON.stringify(product)})'>
                         <i class="material-icons">Editar</i> 
                     </a>
                 </div>
@@ -100,11 +105,23 @@ async function addProduct(name, description, price, stock) {
     }
 }
 
+// Función para abrir el modal de confirmación de eliminación
+let productIdToDelete; // Variable global para el ID del producto a eliminar
+function openDeleteProductModal(id) {
+    productIdToDelete = id; // Almacenar el ID del producto
+    const modalDeleteInstance = M.Modal.getInstance(document.getElementById('modal-delete'));
+    modalDeleteInstance.open(); // Abrir el modal
+}
+
+// Manejador de evento para confirmar la eliminación
+document.getElementById('confirm-delete').addEventListener('click', async () => {
+    await deleteProduct(productIdToDelete); // Llamar a la función de eliminación
+    const modalDeleteInstance = M.Modal.getInstance(document.getElementById('modal-delete'));
+    modalDeleteInstance.close(); // Cerrar el modal
+});
+
 // Función para eliminar producto
 async function deleteProduct(id) {
-    const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este producto?");
-    if (!confirmDelete) return;
-
     try {
         const response = await fetch(`/products/delete/${id}`, {
             method: 'DELETE'
@@ -112,7 +129,7 @@ async function deleteProduct(id) {
 
         if (response.ok) {
             M.toast({ html: 'Producto eliminado correctamente' }); // Materialize Toast
-            loadProducts();
+            loadProducts(); // Recargar la lista de productos
         } else {
             M.toast({ html: 'Error al eliminar producto' }); // Materialize Toast
         }
@@ -122,15 +139,16 @@ async function deleteProduct(id) {
 }
 
 // Función para editar producto
-function editProduct(id, name, description, price, stock) {
+function editProduct(product) {
+    const { id, name, description, price, stock } = product;
     document.getElementById('product-id').value = id; // Establecer ID en el formulario
-    document.getElementById('name').value = name; // Establecer nombre
-    document.getElementById('description').value = description; // Establecer descripción
-    document.getElementById('price').value = price; // Establecer precio
-    document.getElementById('stock').value = stock; // Establecer stock
+    document.getElementById('product-name').value = name; // Establecer nombre
+    document.getElementById('product-description').value = description; // Establecer descripción
+    document.getElementById('product-price').value = price; // Establecer precio
+    document.getElementById('product-stock').value = stock; // Establecer stock
 
-    const modal = M.Modal.getInstance(document.getElementById('modal-edit'));
-    modal.open(); // Abrir el modal de edición
+    const modalEditInstance = M.Modal.getInstance(document.getElementById('modal-edit'));
+    modalEditInstance.open(); // Abrir el modal de edición
 }
 
 // Función para actualizar un producto
@@ -152,4 +170,4 @@ async function updateProduct(id, name, description, price, stock) {
     } catch (error) {
         console.error('Error:', error);
     }
-};
+}

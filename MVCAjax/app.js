@@ -17,7 +17,9 @@ app.use('/products', productRoutes);
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
-
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
 // Ruta para servir el archivo products.html
 app.get('/products', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'products.html'));
