@@ -29,7 +29,7 @@
             <input type="hidden" id="product-id"> <!-- Campo oculto para ID del producto -->
             <p>Nombre: <input type="text" id="name" placeholder="Nombre del Producto" required></p>
             <p>Descripción: <input type="text" id="description" placeholder="Descripción" required></p>
-            <p>Precio:<input type="number" id="price" placeholder="Precio" required></p>
+            <p>Precio:<input type="number"  step="0.01" min="0" id="price" placeholder="Precio" required></p>
             <p>Stock:<input type="number" id="stock" placeholder="Stock" required></p>
             <button type="submit" class="btn">Añadir Producto</button>
         </form>
