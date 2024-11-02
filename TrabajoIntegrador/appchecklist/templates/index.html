@@ -1,0 +1,157 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoQueCambia %}
+<main class="vh-100">
+    <div class="container-fluid h-100 px-4">
+        <h1 class="mt-4">CHECKLIST</h1>
+
+        <!-- Tarjetas de resumen de tareas -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-warning text-white mb-4">
+                    <div class="card-body">Tareas pendientes</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">Ver Detalles</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body">Tareas completadas</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-danger text-white mb-4">
+                    <div class="card-body">Tareas vencidas</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Iconos para agregar y filtrar tareas -->
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a class="d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+                            <img src="{% static 'img/agregar.png' %}" alt="Agregar" style="width: 50px; height: 50px;">
+                        </a>
+                        <a class="d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
+                            <img src="{% static 'img/filtrar.png' %}" alt="Filtrar" style="width: 50px; height: 50px;">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de tareas -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Tareas
+            </div>
+            <div class="card-body">
+                {% for tarea in tareas %}
+                <table id="datatablesSimple" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Lista</th>
+                            <th>Fecha de vencimiento</th>
+                            <th>Dificultad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-bs-toggle="collapse" data-bs-target="#descripcion{{ tarea.id }}" aria-expanded="false" aria-controls="descripcion{{ tarea.id }}">
+                                <td>{{ tarea.titulo }}</td>
+                                <td>{{ tarea.lista.nombre }}</td>
+                                <td>{{ tarea.fecha_vencimiento }}</td>
+                                <td>{{ tarea.prioridad }}</td>
+                            </tr>
+                            <tr class="collapse" id="descripcion{{ tarea.id }}">
+                                <td colspan="4">
+                                    <div class="p-2">
+                                        <strong>Descripción:</strong> {{ tarea.descripcion }}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <p>No hay tareas disponibles en este momento.</p>
+                            {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Modal para agregar tareas -->
+<div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarLabel">Agregar Tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAgregarTarea" method="POST" action="{% url 'agregartarea' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre_tarea" class="form-label">Nombre de la Tarea</label>
+                        <input type="text" class="form-control" id="nombre_tarea" name="nombre_tarea" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lista" class="form-label">Lista</label>
+                        <input type="text" class="form-control" id="lista" name="lista" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fecha_vencimiento" class="form-label">Fecha de Vencimiento</label>
+                        <input type="date" class="form-control" id="fecha_vencimiento" name="fecha_vencimiento" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dificultad" class="form-label">Dificultad</label>
+                        <input type="text" class="form-control" id="dificultad" name="dificultad" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para filtrar tareas -->
+<div class="modal fade" id="modalFiltrar" tabindex="-1" aria-labelledby="modalFiltrarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalFiltrarLabel">Filtrar Tareas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formFiltrarTareas" method="GET" action="{% url 'filtrar' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="filtro_nombre" class="form-label">Nombre de la Tarea</label>
+                        <input type="text" class="form-control" id="filtro_nombre" name="filtro_nombre">
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Filtrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,6 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User 
+from django.conf import settings
 
+class Avatar(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    #user = models.ForeignKey(User, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='imgavatar', default='imgavatar/predeterminado.jpg')
+
+    def __str__(self):
+        return f"{settings.MEDIA_URL}{self.imagen}"
+    
 class Lista(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=100)
@@ -21,11 +30,11 @@ class Tarea(models.Model):
     ]
 
     lista = models.ForeignKey(Lista, on_delete=models.CASCADE, related_name="tareas")
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    titulo = models.CharField(max_length=100)  # Cambiar 'nombre' por 'titulo'
     fecha_vencimiento = models.DateField()
-    dificultad = models.CharField(max_length=5, choices=DIFICULTAD_OPCIONES, default='Media')
-    estado = models.CharField(max_length=15, choices=ESTADO_OPCIONES, default='No completada')
+    prioridad = models.CharField(max_length=5, choices=DIFICULTAD_OPCIONES, default='Media')
+    completada = models.CharField(max_length=15, choices=ESTADO_OPCIONES, default='No completada')
 
     def __str__(self):
-        return self.nombre
+        return self.titulo  
+
