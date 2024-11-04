@@ -88,33 +88,29 @@
                             <td>{{ tarea.prioridad }}</td>
                             <td>{{ tarea.completada }}</td>
                             <td>
-                                <!-- Botón de Modificar -->
-                                <a href="{% url 'modificar_tarea' tarea.id %}" class="btn btn-primary btn-sm">
+                                <!-- Botón de Modificar (abrirá un modal) -->
+                                <a href="#" class="btn-modificar" data-bs-toggle="modal"
+                                    data-bs-target="#modalModificar{{ tarea.id }}">
                                     <img src="{% static 'img/modificar.png' %}" alt="Modificar"
-                                        style="width: 20px; height: 20px;"> Modificar
+                                        style="width: 15%; height: 15%;">
                                 </a>
-                                <!-- Botón de Eliminar -->
-                                <form action="{% url 'eliminar_tarea' tarea.id %}" method="post" style="display: inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('¿Estás seguro de que deseas eliminar la tarea?');">
-                                        <img src="{% static 'img/borrar.png' %}" alt="Eliminar"
-                                            style="width: 20px; height: 20px;"> Eliminar
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr class="collapse" id="descripcion{{ tarea.id }}">
-                            <td colspan="4">
-                                <div class="p-2">
-                                    <strong>Descripción:</strong> {{ tarea.descripcion }}
-                                </div>
-                            </td>
 
+                                <button type="button" class="btn-eliminar" data-bs-toggle="modal"
+                                    data-bs-target="#modalEliminarTarea{{ tarea.id }}"
+                                    style="border: none; background: none; padding: 0; cursor: pointer;">
+                                    <img src="{% static 'img/borrar.png' %}" alt="Eliminar"
+                                        style="width: 30px; height: 30px;">
+                                </button>
+                            </td>
+                            <td class="collapse" id="descripcion{{ tarea.id }}" colspan="6" class="p-2">
+                                <strong>Descripción:</strong> {{ tarea.descripcion }}
+                            </td>
                         </tr>
+
                         {% endfor %}
                     </tbody>
                 </table>
+
                 {% else %}
                 <p>No hay tareas disponibles en este momento.</p>
                 {% endif %}
@@ -180,6 +176,52 @@
         </div>
     </div>
 </div>
+{% for tarea in tareas %}
+<!-- Modal de Modificar Tarea -->
+<div class="modal fade" id="modalModificarTarea{{ tarea.id }}" tabindex="-1"
+    aria-labelledby="modalModificarTareaLabel{{ tarea.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalModificarTareaLabel{{ tarea.id }}">Modificar Tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'modificar_tarea' tarea.id %}" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }} <!-- Asegúrate de que el formulario esté en el contexto -->
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Modal de Confirmación de Eliminación -->
+{% for tarea in tareas %}
+<div class="modal fade" id="modalEliminarTarea{{ tarea.id }}" tabindex="-1"
+    aria-labelledby="modalEliminarTareaLabel{{ tarea.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEliminarTareaLabel{{ tarea.id }}">Eliminar Tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar la tarea ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form action="{% url 'eliminar_tarea' tarea.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
 
 <!-- Modal para filtrar tareas -->
 <div class="modal fade" id="modalFiltrar" tabindex="-1" aria-labelledby="modalFiltrarLabel" aria-hidden="true">

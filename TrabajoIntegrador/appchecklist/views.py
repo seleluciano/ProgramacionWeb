@@ -165,12 +165,40 @@ def listas(request):
     return render(request, 'listas.html')
 
 @login_required
-def modificar_lista(request):
-    return render(request, 'listas.html')
+def modificar_lista(request, lista_id):
+    # Obtener la lista específica o retornar un 404 si no existe
+    lista = get_object_or_404(Lista, id=lista_id, usuario=request.user)
+
+    if request.method == 'POST':
+        form = ListaForm(request.POST, instance=lista)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'La lista se ha modificado exitosamente.')
+            return render(request, 'listas.html')
+        else:
+            messages.error(request, 'Hubo un error al modificar la lista. Por favor, revisa los campos.')
+    else:
+        form = ListaForm(instance=lista)
+
+    return render(request, 'listas.html', {'form': form, 'lista': lista})
 
 @login_required
-def modificar_tarea(request):
-    return render(request, 'index.html')
+def modificar_tarea(request, tarea_id):
+    # Obtener la tarea específica o retornar un 404 si no existe
+    tarea = get_object_or_404(Tarea, id=tarea_id, usuario=request.user)
+
+    if request.method == 'POST':
+        form = TareaForm(request.POST, instance=tarea)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'La tarea se ha modificado exitosamente.')
+            return redirect('inicio')  
+        else:
+            messages.error(request, 'Hubo un error al modificar la tarea. Por favor, revisa los campos.')
+    else:
+        form = TareaForm(instance=tarea)
+
+    return render(request, 'index.html', {'form': form, 'tarea': tarea})
 
 @login_required
 def eliminar_tarea(request, tarea_id):
