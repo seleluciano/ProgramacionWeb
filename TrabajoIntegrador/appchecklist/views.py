@@ -127,7 +127,7 @@ def filtrar_tareas(request):
     if filtro_titulo:
         tareas = tareas.filter(titulo__icontains=filtro_titulo)
     if filtro_descripcion:
-        tareas = tareas.filter(descripcion__icontains=filtro_descripcion)
+        tareas = tareas.filter(prioridad__icontains=filtro_descripcion)
     if filtro_lista:
         tareas = tareas.filter(lista_id=filtro_lista)
     if filtro_fecha:
