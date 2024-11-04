@@ -1,17 +1,16 @@
-from django.shortcuts import redirect, get_object_or_404,render
+from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import *  # Asegúrate de que tu modelo Tarea está importado
-from .forms import *  # Asegúrate de que tienes este formulario definido
 from django.contrib.auth import update_session_auth_hash
+from .models import Tarea, Lista, Avatar
+from .forms import UserRegisterForm, UserEditForm, TareaForm, ListaForm, AvatarFormulario
+from django.contrib.auth.models import User
 
 @login_required
 def inicio(request):
-    tareas = Tarea.objects.filter(completada=False)
-    return render(request, 'index.html', {'tareas': tareas})
-
+    return render(request, 'index.html')
 
 def Iniciosesion(request):
     if request.method == 'POST':
@@ -22,65 +21,52 @@ def Iniciosesion(request):
             user = authenticate(username=usuario, password=contrasenia)
             if user is not None:
                 login(request, user)
-                messages.success(request, f"Bienvenido {usuario}!")  # Mensaje de éxito
-                return redirect('inicio')  # Redirige al inicio o a la página deseada
+                messages.success(request, f"Bienvenido {usuario}!")
+                return redirect('inicio')
             else:
-                messages.error(request, "Datos incorrectos")  # Mensaje de error
-                return render(request, "login.html", {"mensaje": "Datos incorrectos", "hide_navbar": True})
-        else:
-            messages.error(request, "Formulario erróneo")  # Mensaje de error
-            return render(request, "login.html", {"mensaje": "Formulario erróneo", "hide_navbar": True})
-    
-    form = AuthenticationForm()
+                messages.error(request, "Datos incorrectos")
+    else:
+        form = AuthenticationForm()
     return render(request, "login.html", {'form': form, 'hide_navbar': True})
 
 def Registrarusuario(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
             form.save()
-            messages.success(request, "Usuario creado exitosamente :)")  # Mensaje de éxito
-            return render(request, "login.html")
+            messages.success(request, "Usuario creado exitosamente :)")
+            return redirect('inicio')
     else:
         form = UserRegisterForm()
-
     return render(request, "register.html", {'form': form, 'hide_navbar': True})
 
 @login_required 
-def Editarperfil(request): 
+def Editarperfil(request):
     usuario = request.user 
-
     if request.method == 'POST': 
         miFormulario = UserEditForm(request.POST, instance=usuario)
-        if miFormulario.is_valid(): 
-            informacion = miFormulario.cleaned_data 
-
+        if miFormulario.is_valid():
+            informacion = miFormulario.cleaned_data
             nuevo_username = informacion['username']
             if nuevo_username != usuario.username:
                 if User.objects.filter(username=nuevo_username).exists():
                     miFormulario.add_error('username', "El nombre de usuario ya está en uso.")
-                    messages.error(request, "El nombre de usuario ya está en uso.")  # Mensaje de error
+                    messages.error(request, "El nombre de usuario ya está en uso.")
                 else:
                     usuario.username = nuevo_username
-            
             usuario.first_name = informacion['first_name']
             usuario.last_name = informacion['last_name']
             usuario.email = informacion['email']
-
-            # Manejo de contraseña
             if informacion.get('password1') and informacion['password1'] == informacion['password2']:
-                usuario.set_password(informacion['password1'])  # Cambia la contraseña
-                update_session_auth_hash(request, usuario)  # Mantiene la sesión activa
-                messages.success(request, "Perfil actualizado y contraseña cambiada.")  # Mensaje de éxito
+                usuario.set_password(informacion['password1'])
+                update_session_auth_hash(request, usuario)
+                messages.success(request, "Perfil actualizado y contraseña cambiada.")
             else:
-                messages.success(request, "Perfil actualizado correctamente.")  # Mensaje de éxito sin contraseña
-
-            usuario.save() 
+                messages.success(request, "Perfil actualizado correctamente.")
+            usuario.save()
             return redirect('inicio')
-    else: 
-        miFormulario = UserEditForm(instance=usuario)  # Carga los datos actuales del usuario
-
+    else:
+        miFormulario = UserEditForm(instance=usuario)
     return render(request, "perfil.html", {"miFormulario": miFormulario, "usuario": usuario})
 
 @login_required
@@ -90,61 +76,112 @@ def Cambiaravatar(request):
         avatar = usuario.avatar
     except Avatar.DoesNotExist:
         avatar = None
-
     if request.method == 'POST':
         miFormulario = AvatarFormulario(request.POST, request.FILES, instance=avatar)
         if miFormulario.is_valid():
-            nuevo_avatar = miFormulario.save(commit=False)  # No guardes todavía
-            nuevo_avatar.user = usuario  # Asigna el usuario actual
-            nuevo_avatar.save()  # Ahora guarda
-            messages.success(request, "¡Avatar cambiado exitosamente!")  # Mensaje de éxito
+            nuevo_avatar = miFormulario.save(commit=False)
+            nuevo_avatar.user = usuario
+            nuevo_avatar.save()
+            messages.success(request, "¡Avatar cambiado exitosamente!")
             return redirect('inicio')
-            
     else:
         miFormulario = AvatarFormulario(instance=avatar)
-
     return render(request, "cambiaravatar.html", {"miFormulario": miFormulario, "avatar": avatar})
 
-
-# Vista para logout
 @login_required
 def logout_view(request):
     logout(request)
     messages.info(request, "Has cerrado sesión.")
-    return render(request, "login.html")
+    return redirect('iniciarsesion')
 
-# Vista para gráficos
 @login_required
 def graficos(request):
     return render(request, "graficos.html")
 
-
-# Vista para listas de tareas
 @login_required
-def listas(request):
-    return render(request, "listadetareas.html")
+def agregar_tarea(request):
 
-# Vista para agregar tarea
-@login_required
-def agregartarea(request):
     if request.method == 'POST':
         form = TareaForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Tarea agregada con éxito.")
-            return redirect('inicio')  # Cambia a la vista que desees
+            nueva_tarea = form.save(commit=False)
+            nueva_tarea.usuario = request.user
+            nueva_tarea.save()
+            messages.success(request, "Tarea agregada exitosamente.")
+            return redirect('inicio')
     else:
         form = TareaForm()
-    return render(request, "index.html", {'form': form})
+        messages.success(request, "No se pudo agregar la tarea, intente nuevamente")
 
-# Vista para filtrar tareas
+    return render(request, 'index.html', {'form': form})
+
 @login_required
-def filtrar(request):
-    return render(request, "filtrar.html")
+def filtrar_tareas(request):
+    tareas = Tarea.objects.filter(usuario=request.user)
+    filtro_titulo = request.GET.get('filtro_titulo')
+    filtro_descripcion = request.GET.get('filtro_descripcion')
+    filtro_lista = request.GET.get('filtro_lista')
+    filtro_fecha = request.GET.get('filtro_fecha')
+    filtro_dificultad = request.GET.get('filtro_dificultad')
 
+    if filtro_titulo:
+        tareas = tareas.filter(titulo__icontains=filtro_titulo)
+    if filtro_descripcion:
+        tareas = tareas.filter(descripcion__icontains=filtro_descripcion)
+    if filtro_lista:
+        tareas = tareas.filter(lista_id=filtro_lista)
+    if filtro_fecha:
+        tareas = tareas.filter(fecha_vencimiento=filtro_fecha)
+    if filtro_dificultad:
+        tareas = tareas.filter(dificultad=filtro_dificultad)
+
+    return render(request, 'index.html', {'tareas': tareas})
+
+@login_required
+def agregar_lista(request):
+    if request.method == 'POST':
+        form = ListaForm(request.POST)
+        if form.is_valid():
+            nueva_lista = form.save(commit=False)
+            nueva_lista.usuario = request.user
+            nueva_lista.save()
+            messages.success(request, "Lista agregada exitosamente.")
+            return redirect('listas')
+    else:
+        form = ListaForm()
+    return render(request, 'index.html', {'form': form})
+
+@login_required
 def completar_tarea(request, tarea_id):
-    tarea = get_object_or_404(Tarea, id=tarea_id)
+    tarea = get_object_or_404(Tarea, id=tarea_id, usuario=request.user)
     if request.method == "POST":
         tarea.completada = True
         tarea.save()
-    return render(request, "index.html")
+        messages.success(request, "Tarea completada exitosamente.")
+        return redirect('inicio')
+
+@login_required
+def listas(request):
+    return render(request, 'listas.html')
+
+@login_required
+def modificar_lista(request):
+    return render(request, 'listas.html')
+
+@login_required
+def modificar_tarea(request):
+    return render(request, 'index.html')
+
+@login_required
+def eliminar_tarea(request, tarea_id):
+    tarea = get_object_or_404(Tarea, id=tarea_id, usuario=request.user)
+    tarea.delete()
+    messages.success(request, "Tarea eliminada exitosamente.")
+    return redirect('inicio')
+
+@login_required
+def eliminar_lista(request, lista_id):
+    lista = get_object_or_404(Lista, id=lista_id, usuario=request.user)
+    lista.delete()
+    messages.success(request, "Lista eliminada exitosamente.")
+    return redirect('listas')

@@ -19,12 +19,12 @@ class TareaForm(forms.ModelForm):
         fields = ['titulo', 'fecha_vencimiento', 'prioridad', 'completada', 'lista']
         widgets = {
             'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de la tarea'}),
-            'prioridad': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Prioridad'}),
             'fecha_vencimiento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'dificultad': forms.Select(attrs={'class': 'form-select'}),
+            'prioridad': forms.Select(attrs={'class': 'form-select'}),  # Cambiado a Select
             'completada': forms.Select(attrs={'class': 'form-select'}),
             'lista': forms.Select(attrs={'class': 'form-select'}),
         }
+
 
 class UserRegisterForm(UserCreationForm):
     first_name = forms.CharField(label="Nombre", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingresa tu nombre'}))

@@ -11241,3 +11241,37 @@ body {
   font-size: 0.75rem;
   border-radius: 0.375rem !important;
 }
+/* Contenedor de los mensajes tipo toast */
+#toast-container {
+  position: fixed;
+  bottom: 20px;  /* Ajusta la distancia desde el borde inferior */
+  right: 20px;   /* Ajusta la distancia desde el borde derecho */
+  z-index: 1000;
+}
+
+/* Estilos para cada mensaje toast */
+.toast {
+  min-width: 200px;
+  max-width: 300px;
+  margin-bottom: 10px; /* Espacio entre los mensajes */
+  padding: 15px;
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateX(100%);
+}
+
+/* Clase para mostrar el toast */
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Efecto de desvanecimiento al ocultarse */
+.toast.hide {
+  opacity: 0;
+  transform: translateX(100%);
+}

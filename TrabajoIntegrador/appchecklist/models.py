@@ -34,7 +34,8 @@ class Tarea(models.Model):
     fecha_vencimiento = models.DateField()
     prioridad = models.CharField(max_length=5, choices=DIFICULTAD_OPCIONES, default='Media')
     completada = models.CharField(max_length=15, choices=ESTADO_OPCIONES, default='No completada')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+
 
     def __str__(self):
-        return self.titulo  
-
+        return f"{self.titulo} ({self.usuario.username})"

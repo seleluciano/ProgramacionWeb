@@ -4,7 +4,11 @@
 {% block contenidoQueCambia %}
 <main class="vh-100">
     <div class="container-fluid h-100 px-4">
-        <h1 class="mt-4">CHECKLIST</h1>
+        <h1 class="mt-4 text-center">CHECKLIST</h1>
+        <button class="btn btn-dark text-white" data-bs-toggle="modal" data-bs-target="#modalAgregarLista">
+            <i class="bi bi-plus-circle"></i> Agregar Lista
+        </button>
+        <br><br>
 
         <!-- Tarjetas de resumen de tareas -->
         <div class="row">
@@ -42,10 +46,12 @@
             <div class="col-xl-12">
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <a class="d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+                        <a class="d-flex align-items-center" href="#" data-bs-toggle="modal"
+                            data-bs-target="#modalAgregar">
                             <img src="{% static 'img/agregar.png' %}" alt="Agregar" style="width: 50px; height: 50px;">
                         </a>
-                        <a class="d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
+                        <a class="d-flex align-items-center" href="#" data-bs-toggle="modal"
+                            data-bs-target="#modalFiltrar">
                             <img src="{% static 'img/filtrar.png' %}" alt="Filtrar" style="width: 50px; height: 50px;">
                         </a>
                     </div>
@@ -60,7 +66,7 @@
                 Tareas
             </div>
             <div class="card-body">
-                {% for tarea in tareas %}
+                {% if tareas %}
                 <table id="datatablesSimple" class="table table-striped">
                     <thead>
                         <tr>
@@ -68,31 +74,56 @@
                             <th>Lista</th>
                             <th>Fecha de vencimiento</th>
                             <th>Dificultad</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-bs-toggle="collapse" data-bs-target="#descripcion{{ tarea.id }}" aria-expanded="false" aria-controls="descripcion{{ tarea.id }}">
-                                <td>{{ tarea.titulo }}</td>
-                                <td>{{ tarea.lista.nombre }}</td>
-                                <td>{{ tarea.fecha_vencimiento }}</td>
-                                <td>{{ tarea.prioridad }}</td>
-                            </tr>
-                            <tr class="collapse" id="descripcion{{ tarea.id }}">
-                                <td colspan="4">
-                                    <div class="p-2">
-                                        <strong>Descripción:</strong> {{ tarea.descripcion }}
-                                    </div>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <p>No hay tareas disponibles en este momento.</p>
-                            {% endfor %}
+                        {% for tarea in tareas %}
+                        <tr data-bs-toggle="collapse" data-bs-target="#descripcion{{ tarea.id }}" aria-expanded="false"
+                            aria-controls="descripcion{{ tarea.id }}">
+                            <td>{{ tarea.titulo }}</td>
+                            <td>{{ tarea.lista.nombre }}</td>
+                            <td>{{ tarea.fecha_vencimiento }}</td>
+                            <td>{{ tarea.prioridad }}</td>
+                            <td>{{ tarea.completada }}</td>
+                            <td>
+                                <!-- Botón de Modificar -->
+                                <a href="{% url 'modificar_tarea' tarea.id %}" class="btn btn-primary btn-sm">
+                                    <img src="{% static 'img/modificar.png' %}" alt="Modificar"
+                                        style="width: 20px; height: 20px;"> Modificar
+                                </a>
+                                <!-- Botón de Eliminar -->
+                                <form action="{% url 'eliminar_tarea' tarea.id %}" method="post" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar la tarea?');">
+                                        <img src="{% static 'img/borrar.png' %}" alt="Eliminar"
+                                            style="width: 20px; height: 20px;"> Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr class="collapse" id="descripcion{{ tarea.id }}">
+                            <td colspan="4">
+                                <div class="p-2">
+                                    <strong>Descripción:</strong> {{ tarea.descripcion }}
+                                </div>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
+                {% else %}
+                <p>No hay tareas disponibles en este momento.</p>
+                {% endif %}
             </div>
         </div>
+
     </div>
 </main>
+
 
 <!-- Modal para agregar tareas -->
 <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
@@ -106,8 +137,8 @@
                 <form id="formAgregarTarea" method="POST" action="{% url 'agregartarea' %}">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="nombre_tarea" class="form-label">Nombre de la Tarea</label>
-                        <input type="text" class="form-control" id="nombre_tarea" name="nombre_tarea" required>
+                        <label for="titulo" class="form-label">Título de la Tarea</label>
+                        <input type="text" class="form-control" id="titulo" name="titulo" required>
                     </div>
                     <div class="mb-3">
                         <label for="descripcion" class="form-label">Descripción</label>
@@ -115,15 +146,33 @@
                     </div>
                     <div class="mb-3">
                         <label for="lista" class="form-label">Lista</label>
-                        <input type="text" class="form-control" id="lista" name="lista" required>
+                        <select class="form-select" id="lista" name="lista" required>
+                            {% for lista in listas %}
+                            <option value="{{ lista.id }}">{{ lista.nombre }}</option>
+                            {% empty %}
+                            <option>No hay listas disponibles en este momento.</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="fecha_vencimiento" class="form-label">Fecha de Vencimiento</label>
-                        <input type="date" class="form-control" id="fecha_vencimiento" name="fecha_vencimiento" required>
+                        <input type="date" class="form-control" id="fecha_vencimiento" name="fecha_vencimiento"
+                            required>
                     </div>
                     <div class="mb-3">
-                        <label for="dificultad" class="form-label">Dificultad</label>
-                        <input type="text" class="form-control" id="dificultad" name="dificultad" required>
+                        <label for="prioridad" class="form-label">Dificultad</label>
+                        <select class="form-select" id="prioridad" name="prioridad" required>
+                            <option value="Baja">Baja</option>
+                            <option value="Media">Media</option>
+                            <option value="Alta">Alta</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="completada" class="form-label">Estado</label>
+                        <select class="form-select" id="completada" name="completada" required>
+                            <option value="No completada">No completada</option>
+                            <option value="Completada">Completada</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </form>
@@ -144,8 +193,36 @@
                 <form id="formFiltrarTareas" method="GET" action="{% url 'filtrar' %}">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="filtro_nombre" class="form-label">Nombre de la Tarea</label>
-                        <input type="text" class="form-control" id="filtro_nombre" name="filtro_nombre">
+                        <label for="filtro_titulo" class="form-label">Título de la Tarea</label>
+                        <input type="text" class="form-control" id="filtro_titulo" name="filtro_titulo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="filtro_descripcion" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="filtro_descripcion" name="filtro_descripcion">
+                    </div>
+                    <div class="mb-3">
+                        <label for="filtro_lista" class="form-label">Lista</label>
+                        <select class="form-select" id="filtro_lista" name="filtro_lista">
+                            <option value="">Seleccione una lista</option>
+                            {% for lista in listas %}
+                            <option value="{{ lista.id }}">{{ lista.nombre }}</option>
+                            {% empty %}
+                            <p>No hay listas disponibles en este momento.</p>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="filtro_fecha" class="form-label">Fecha de Vencimiento</label>
+                        <input type="date" class="form-control" id="filtro_fecha" name="filtro_fecha">
+                    </div>
+                    <div class="mb-3">
+                        <label for="filtro_dificultad" class="form-label">Dificultad</label>
+                        <select class="form-select" id="filtro_dificultad" name="filtro_dificultad">
+                            <option value="">Seleccione dificultad</option>
+                            <option value="Baja">Baja</option>
+                            <option value="Media">Media</option>
+                            <option value="Alta">Alta</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-secondary">Filtrar</button>
                 </form>
@@ -153,5 +230,28 @@
         </div>
     </div>
 </div>
+<!-- Modal para agregar listas -->
+<div class="modal fade" id="modalAgregarLista" tabindex="-1" aria-labelledby="modalAgregarListaLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarListaLabel">Agregar Lista</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAgregarLista" method="POST" action="{% url 'agregar_lista' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre_lista" class="form-label">Nombre de la Lista</label>
+                        <input type="text" class="form-control" id="nombre_lista" name="nombre" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}
