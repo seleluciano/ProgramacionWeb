@@ -46,3 +46,9 @@ def tareas_summary(request):
         'tareas_vencidas': tareas_vencidas,
     }
 
+def listas_y_cantidad_tareas(request):
+    if request.user.is_authenticated:
+        listas = Lista.objects.filter(usuario=request.user)
+        datos_grafico = {lista.nombre: lista.tareas.count() for lista in listas}
+        return {'datos_grafico': json.dumps(datos_grafico)}  # Importa json si no lo has hecho
+    return {}

@@ -2,7 +2,43 @@
 {% load static %}
 
 {% block contenidoQueCambia %}
-<h2 style="text-align: center;">DISTRIBUCION DE TAREAS</h2>
+<h2 style="text-align: center;">DISTRIBUCION DE TAREAS SEGUN LAS LISTAS</h2>
+<canvas id="graficoTareas" width="400" height="150"></canvas>
 
+<script>
+    // Asegúrate de que la variable datosGrafico sea definida correctamente en el template
+    const datosGrafico = JSON.parse('{{ datos_grafico|escapejs }}');
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        if (datosGrafico && Object.keys(datosGrafico).length > 0) {
+            const ctx = document.getElementById('graficoTareas').getContext('2d');
+            const etiquetas = Object.keys(datosGrafico);
+            const cantidades = Object.values(datosGrafico);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: etiquetas,
+                    datasets: [{
+                        label: 'Cantidad de Tareas',
+                        data: cantidades,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        } else {
+            console.error('Los datos del gráfico no están definidos o están vacíos.');
+        }
+    });
+</script>
 
 {% endblock %}
