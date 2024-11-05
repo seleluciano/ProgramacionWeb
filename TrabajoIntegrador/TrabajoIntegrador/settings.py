@@ -60,6 +60,7 @@ TEMPLATES = [
                 'appchecklist.context_processors.avatar_context',
                 'appchecklist.context_processors.listas_context',
                 'appchecklist.context_processors.tareas_summary',
+                'appchecklist.context_processors.tareas_por_lista',
             ],
         },
     },

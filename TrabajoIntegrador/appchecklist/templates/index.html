@@ -192,14 +192,67 @@
             <div class="modal-body">
                 <form action="{% url 'modificar_tarea' tarea.id %}" method="post">
                     {% csrf_token %}
-                    {{ form.as_p }} <!-- Asegúrate de que el formulario esté en el contexto -->
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    
+                    <div class="mb-3">
+                        <label for="titulo{{ tarea.id }}" class="form-label">Título de la Tarea</label>
+                        <input type="text" class="form-control" id="titulo{{ tarea.id }}" name="titulo" 
+                            value="{{ tarea.titulo }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="descripcion{{ tarea.id }}" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion{{ tarea.id }}" name="descripcion" 
+                            required>{{ tarea.descripcion }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="lista{{ tarea.id }}" class="form-label">Lista</label>
+                        <select class="form-select" id="lista{{ tarea.id }}" name="lista" required>
+                            {% for lista in listas %}
+                            <option value="{{ lista.id }}" {% if lista.id == tarea.lista.id %}selected{% endif %}>
+                                {{ lista.nombre }}
+                            </option>
+                            {% empty %}
+                            <option>No hay listas disponibles en este momento.</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="fecha_vencimiento{{ tarea.id }}" class="form-label">Fecha de Vencimiento</label>
+                        <input type="date" class="form-control" id="fecha_vencimiento{{ tarea.id }}" name="fecha_vencimiento"
+                            value="{{ tarea.fecha_vencimiento|date:'Y-m-d' }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="prioridad{{ tarea.id }}" class="form-label">Dificultad</label>
+                        <select class="form-select" id="prioridad{{ tarea.id }}" name="prioridad" required>
+                            <option value="Baja" {% if tarea.prioridad == 'Baja' %}selected{% endif %}>Baja</option>
+                            <option value="Media" {% if tarea.prioridad == 'Media' %}selected{% endif %}>Media</option>
+                            <option value="Alta" {% if tarea.prioridad == 'Alta' %}selected{% endif %}>Alta</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="completada{{ tarea.id }}" class="form-label">Estado</label>
+                        <select class="form-select" id="completada{{ tarea.id }}" name="completada" required>
+                            <option value="No completada" {% if tarea.completada == 'No completada' %}selected{% endif %}>
+                                No completada
+                            </option>
+                            <option value="Completada" {% if tarea.completada == 'Completada' %}selected{% endif %}>
+                                Completada
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 {% endfor %}
+
 
 <!-- Modal de Confirmación de Eliminación -->
 {% for tarea in tareas %}

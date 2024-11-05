@@ -95,10 +95,6 @@ def logout_view(request):
     return redirect('iniciarsesion')
 
 @login_required
-def graficos(request):
-    return render(request, "graficos.html")
-
-@login_required
 def agregar_tarea(request):
 
     if request.method == 'POST':
@@ -117,7 +113,7 @@ def agregar_tarea(request):
 
 @login_required
 def filtrar_tareas(request):
-    tareas = Tarea.objects.filter(usuario=request.user)
+    tareas = Tarea.objects.filter(usuario=request.user,completada="No completada")
     filtro_titulo = request.GET.get('filtro_titulo')
     filtro_descripcion = request.GET.get('filtro_descripcion')
     filtro_lista = request.GET.get('filtro_lista')
@@ -213,3 +209,11 @@ def eliminar_lista(request, lista_id):
     lista.delete()
     messages.success(request, "Lista eliminada exitosamente.")
     return redirect('listas')
+
+@login_required
+def graficotarea(request):
+    return render(request, "distribuciondetareas.html")
+
+@login_required
+def graficolista(request):
+    return render(request, "graficolistas.html")

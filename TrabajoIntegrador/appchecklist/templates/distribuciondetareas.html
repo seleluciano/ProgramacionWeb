@@ -1,0 +1,14 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block contenidoQueCambia %}
+<h2 style="text-align: center;">DISTRIBUCION DE TAREAS</h2>
+<div id="grafico" style="width: 100%; height: 400px;"></div>
+<!-- Definir las variables de Django para que estén disponibles en JavaScript -->
+<script>
+     const tareasPendientes = "{{ tareas_pendientes|default:'0' }}";
+     const tareasCompletadas = "{{ tareas_completadas|default:'0' }}";
+     const tareasVencidas = "{{ tareas_vencidas|default:'0' }}";
+</script>
+
+{% endblock %}

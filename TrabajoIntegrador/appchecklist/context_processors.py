@@ -1,6 +1,7 @@
 from .models import Tarea, Lista, Avatar
 from django.templatetags.static import static
 from django.utils import timezone
+import json
 
 
 def tareas_context(request):
@@ -44,3 +45,4 @@ def tareas_summary(request):
         'tareas_completadas': tareas_completadas,
         'tareas_vencidas': tareas_vencidas,
     }
+
