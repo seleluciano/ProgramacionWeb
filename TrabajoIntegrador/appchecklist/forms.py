@@ -16,13 +16,14 @@ class ListaForm(forms.ModelForm):
 class TareaForm(forms.ModelForm):
     class Meta:
         model = Tarea
-        fields = ['titulo', 'fecha_vencimiento', 'prioridad', 'completada', 'lista']
+        fields = ['titulo', 'fecha_vencimiento','descripcion', 'prioridad', 'completada', 'lista']
         widgets = {
             'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de la tarea'}),
             'fecha_vencimiento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'prioridad': forms.Select(attrs={'class': 'form-select'}),  # Cambiado a Select
             'completada': forms.Select(attrs={'class': 'form-select'}),
             'lista': forms.Select(attrs={'class': 'form-select'}),
+            
         }
 
 

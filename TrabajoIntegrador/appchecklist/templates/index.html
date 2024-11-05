@@ -14,32 +14,27 @@
         <div class="row">
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-warning text-white mb-4">
-                    <div class="card-body">Tareas pendientes</div>
+                    <div class="card-body">Tareas pendientes: {{ tareas_pendientes }}</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">Ver Detalles</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-success text-white mb-4">
-                    <div class="card-body">Tareas completadas</div>
+                    <div class="card-body">Tareas completadas: {{ tareas_completadas }}</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-danger text-white mb-4">
-                    <div class="card-body">Tareas vencidas</div>
+                    <div class="card-body">Tareas vencidas: {{ tareas_vencidas }}</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!-- Iconos para agregar y filtrar tareas -->
         <div class="row">
@@ -90,7 +85,7 @@
                             <td>
                                 <!-- Botón de Modificar (abrirá un modal) -->
                                 <a href="#" class="btn-modificar" data-bs-toggle="modal"
-                                    data-bs-target="#modalModificar{{ tarea.id }}">
+                                    data-bs-target="#modalModificarTarea{{ tarea.id }}">
                                     <img src="{% static 'img/modificar.png' %}" alt="Modificar"
                                         style="width: 15%; height: 15%;">
                                 </a>
@@ -102,11 +97,11 @@
                                         style="width: 30px; height: 30px;">
                                 </button>
                             </td>
-                            <td class="collapse" id="descripcion{{ tarea.id }}" colspan="6" class="p-2">
-                                <strong>Descripción:</strong> {{ tarea.descripcion }}
-                            </td>
                         </tr>
-
+                        <tr data-bs-toggle="collapse" data-bs-target="#descripcion{{ tarea.id }}" aria-expanded="false"
+                            aria-controls="descripcion{{ tarea.id }}">
+                            <td>{{tarea.descripcion}}</td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>

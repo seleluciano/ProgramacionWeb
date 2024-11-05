@@ -31,6 +31,7 @@ class Tarea(models.Model):
 
     lista = models.ForeignKey(Lista, on_delete=models.CASCADE, related_name="tareas")
     titulo = models.CharField(max_length=100)  # Cambiar 'nombre' por 'titulo'
+    descripcion=models.CharField(max_length=300)
     fecha_vencimiento = models.DateField()
     prioridad = models.CharField(max_length=5, choices=DIFICULTAD_OPCIONES, default='Media')
     completada = models.CharField(max_length=15, choices=ESTADO_OPCIONES, default='No completada')

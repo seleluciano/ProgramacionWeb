@@ -1,5 +1,7 @@
 from .models import Tarea, Lista, Avatar
 from django.templatetags.static import static
+from django.utils import timezone
+
 
 def tareas_context(request):
     if request.user.is_authenticated:
@@ -24,3 +26,21 @@ def listas_context(request):
         listas = Lista.objects.filter(usuario=request.user)
         return {'listas': listas}
     return {}
+
+def tareas_summary(request):
+    if request.user.is_authenticated:
+        tareas = Tarea.objects.filter(usuario=request.user)
+
+        tareas_pendientes = tareas.filter(completada="No completada").count()
+        tareas_completadas = tareas.filter(completada="Completada").count()
+        tareas_vencidas = tareas.filter(fecha_vencimiento__lt=timezone.now(), completada="No completada").count()
+    else:
+        tareas_pendientes = 0
+        tareas_completadas = 0
+        tareas_vencidas = 0
+
+    return {
+        'tareas_pendientes': tareas_pendientes,
+        'tareas_completadas': tareas_completadas,
+        'tareas_vencidas': tareas_vencidas,
+    }
