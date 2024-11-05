@@ -5,7 +5,7 @@ from django.utils import timezone
 
 def tareas_context(request):
     if request.user.is_authenticated:
-        tareas = Tarea.objects.filter(usuario=request.user)
+        tareas = Tarea.objects.filter(usuario=request.user,completada="No completada")
         return {'tareas': tareas}
     return {}
 
@@ -32,7 +32,7 @@ def tareas_summary(request):
         tareas = Tarea.objects.filter(usuario=request.user)
 
         tareas_pendientes = tareas.filter(completada="No completada").count()
-        tareas_completadas = tareas.filter(completada="Completada").count()
+        tareas_completadas = tareas.filter(completada=True).count()
         tareas_vencidas = tareas.filter(fecha_vencimiento__lt=timezone.now(), completada="No completada").count()
     else:
         tareas_pendientes = 0

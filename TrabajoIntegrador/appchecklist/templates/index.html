@@ -65,11 +65,11 @@
                 <table id="datatablesSimple" class="table table-striped">
                     <thead>
                         <tr>
+                            <th>Estado</th> <!-- Nueva columna para el estado -->
                             <th>Nombre</th>
                             <th>Lista</th>
                             <th>Fecha de vencimiento</th>
                             <th>Dificultad</th>
-                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -77,11 +77,18 @@
                         {% for tarea in tareas %}
                         <tr data-bs-toggle="collapse" data-bs-target="#descripcion{{ tarea.id }}" aria-expanded="false"
                             aria-controls="descripcion{{ tarea.id }}">
+                            <td>
+                                <form action="{% url 'marcar_completada' tarea.id %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="checkbox" name="completada" id="completada{{ tarea.id }}"
+                                        value="Completada" onchange="this.form.submit()" {% if tarea.completada == 'Completada' %} checked {% endif %}>
+                                    <label for="completada{{ tarea.id }}"></label>
+                                </form>
+                            </td>
                             <td>{{ tarea.titulo }}</td>
                             <td>{{ tarea.lista.nombre }}</td>
                             <td>{{ tarea.fecha_vencimiento }}</td>
                             <td>{{ tarea.prioridad }}</td>
-                            <td>{{ tarea.completada }}</td>
                             <td>
                                 <!-- Botón de Modificar (abrirá un modal) -->
                                 <a href="#" class="btn-modificar" data-bs-toggle="modal"
@@ -89,7 +96,7 @@
                                     <img src="{% static 'img/modificar.png' %}" alt="Modificar"
                                         style="width: 15%; height: 15%;">
                                 </a>
-
+                
                                 <button type="button" class="btn-eliminar" data-bs-toggle="modal"
                                     data-bs-target="#modalEliminarTarea{{ tarea.id }}"
                                     style="border: none; background: none; padding: 0; cursor: pointer;">
@@ -100,11 +107,12 @@
                         </tr>
                         <tr data-bs-toggle="collapse" data-bs-target="#descripcion{{ tarea.id }}" aria-expanded="false"
                             aria-controls="descripcion{{ tarea.id }}">
-                            <td>{{tarea.descripcion}}</td>
+                            <td colspan="6">{{ tarea.descripcion }}</td> <!-- Unir columnas para descripción -->
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                
 
                 {% else %}
                 <p>No hay tareas disponibles en este momento.</p>
